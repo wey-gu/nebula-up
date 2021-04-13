@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 set -e
 
 # Copyright (c) 2019 vesoft inc. All rights reserved.
@@ -6,7 +6,7 @@ set -e
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
-# Usage: install.sh [--version/-v 2.0.0] [--no-web] [--no-console]
+# Usage: install.sh
 
 # Check Platform & Distribution
 
@@ -21,17 +21,17 @@ function get_platform {
 }
 
 function get_distribution {
-	echo "$(source /etc/os-release && echo "$ID" || true)"
+	echo "$(source /etc/os-release && echo "$ID")"
 }
 
 # Detect Network Env
 
 function nc_get_google_com {
-	echo -n "GET / HTTP/1.0\r\n" | nc -v google.com 80 2>&1 | grep -q "http] succeeded" && echo "OK" || true
+	echo 2> /dev/null -n "GET / HTTP/1.0\r\n" | nc -v google.com 80 2>&1 | grep -q "http] succeeded" && echo "OK" || echo "NOK"
 }
 
 function cat_get_google_com {
-	cat < /dev/null > /dev/tcp/google.com/80 && echo "OK" || true
+	cat 2>/dev/null < /dev/null > /dev/tcp/google.com/80 && echo "OK" || echo "NOK"
 }
 
 function is_CN_NETWORK {
@@ -49,19 +49,15 @@ function is_CN_NETWORK {
 # Install Dependencies(docker, Package Manager) with Network Env Awareness
 
 function utility_exists {
-	which $1 && true || false
+	which $1 1>/dev/null && true || false
 }
 
 function install_package_ubuntu {
-	# $1 string: package name
-	# $2 bool:   if CN network
 	sudo apt-get update
 	sudo apt-get install -y $1
 }
 
 function install_package_centos {
-	# $1 string: package name
-	# $2 bool:   if CN network
 	sudo apt-get update
 	sudo yum install -y $1
 }
@@ -88,8 +84,6 @@ function install_package_mac {
 }
 
 function install_package {
-	# $1 string: package name
-	# $2 bool:   if CN network
 	case $PLATFORM in
 		*arwin*) install_package_mac $1;;
 		*inux*)  install_package_$(get_distribution) $1;;
@@ -145,6 +139,9 @@ function ensure_dependencies {
 		fi
 	else
 		start_docker
+	fi
+	if ! utility_exists "docker-compose"; then
+		install_package "docker-compose"
 	fi
 	# TBD for other dependencies
 }

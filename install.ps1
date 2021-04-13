@@ -5,7 +5,7 @@
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
-# Usage: install.ps1 [--version/-v 2.0.0] [--no-web] [--no-console]
+# Usage: install.ps1
 
 # Detect Network Env
 
