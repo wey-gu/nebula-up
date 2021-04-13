@@ -101,6 +101,16 @@ function install_docker {
 	esac
 }
 
+function install_docker_compose {
+	# Only Linux is needed, for macOS, Docker Desktop comes with compose out of box
+	COMPOSE_VERSION="1.29.0"
+	echo
+	echo "Starting Instlation of Docker-Compose"
+	echo
+	sudo curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+	sudo chmod +x /usr/local/bin/docker-compose
+}
+
 function start_docker {
 	case $PLATFORM in
 		*inux*)  sudo systemctl start docker ;;
@@ -141,7 +151,7 @@ function ensure_dependencies {
 		start_docker
 	fi
 	if ! utility_exists "docker-compose"; then
-		install_package "docker-compose"
+		install_docker_compose
 	fi
 	# TBD for other dependencies
 }
