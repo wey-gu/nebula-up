@@ -36,8 +36,8 @@ function cat_get_google_com {
 
 function is_CN_NETWORK {
 	case $PLATFORM in
-		"x86_64-darwin"|"x86_64-linux") internet_result=$(nc_get_google_com) ;;
-		"Linux x86_64") internet_result=$(cat_get_google_com) ;;
+		"x86_64-darwin"|"aarch64-darwin") internet_result=$(nc_get_google_com) ;;
+		"x86_64-linux") internet_result=$(cat_get_google_com) ;;
 	esac
 	if [ $internet_result == "OK" ]; then
 		false
@@ -71,13 +71,13 @@ function install_homebrew {
 		# https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/
 		BREW_TYPE="homebrew"
 		HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-        HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/${BREW_TYPE}-core.git"
-        HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/${BREW_TYPE}-bottles"
-    fi
-    echo
-    echo Installing Homebrew
-    echo
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+		HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/${BREW_TYPE}-core.git"
+		HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/${BREW_TYPE}-bottles"
+	fi
+	echo
+	echo Installing Homebrew
+	echo
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
 function install_package_mac {
@@ -166,14 +166,13 @@ function waiting_for_nebula_graph_up {
 	echo
 	expected_containers_count_str="9"
 	healthy_containers_count_str=""
-	max_attempts=${MAX_ATTEMPTS-5}
+	max_attempts=${MAX_ATTEMPTS-6}
 	timer=${INIT_TIMER-4}
 
 	while [[ $attempt < $max_attempts ]]
 	do
-		healthy_containers_count_str=$(docker ps --filter health=healthy |grep -v "CONTAINER ID"| wc -l)
-		if [[ $healthy_containers_count_str == $expected_containers_count_str ]]
-		then
+		healthy_containers_count_str=$(docker ps --filter health=healthy |grep -v "CONTAINER ID"|wc -l|sed -e 's/^[[:space:]]*//')
+		if [[ "$healthy_containers_count_str" == "$expected_containers_count_str" ]]; then
 			break
 		fi
 		echo "Healthcheck Attempt: ${attempt-0} Failed, Retrying in $timer Seconds..." 1>&2
@@ -182,7 +181,7 @@ function waiting_for_nebula_graph_up {
 		timer=$(( timer * 2 ))
 	done
 
-	if [[ $healthy_containers_count_str != $expected_containers_count_str ]]; then
+	if [[ "$healthy_containers_count_str" != "$expected_containers_count_str" ]]; then
 		echo "[ERROR] Failed to waiting for all containers to be healthy, check docker ps for details." 1>&2
 	fi
 }
@@ -204,7 +203,7 @@ function install_nebula_graph {
 	docker-compose pull
 	docker-compose up -d
 
-	local MAX_ATTEMPTS=5
+	local MAX_ATTEMPTS=6
 	local INIT_TIMER=4
 	waiting_for_nebula_graph_up
 }
