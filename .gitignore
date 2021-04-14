@@ -4,3 +4,6 @@ nebula-web-docker
 
 # generated scripts
 uninstall.sh
+
+# macOS
+.DS_Store

@@ -1,5 +1,7 @@
 # Nebula-Up
 
+[![nebula-up demo](./images/nebula-up-demo.svg)](https://asciinema.org/a/407151 "Nebula Up Demo")
+
 `Nebula-Up` is an utitly PoC to enable developer and user to bootstrap an nebula-graph cluster with nebula-graph-studio(Web UI) and nebula-graph-console(Command UI) ready out of box in oneliner install, required packages will handled with `nebula-up` as well, including docker on Linux(Ubuntu/CentOS), macOS(including both Intel and M1 chip based), and Windows.
 
 Also, it's optimized to leverage China Repo Mirrors(docker, brew, gitee, etc...) in case needed enable a smooth deployment for Mainland China users.
