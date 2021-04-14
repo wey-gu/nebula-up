@@ -282,9 +282,22 @@ function install_nebula_graph_console {
 	echo "[INFO] Pulling nebula-console docker image"
 	echo
 	sudo docker pull vesoft/nebula-console:v2.0.0-ga 1>/dev/null 2>/dev/null
+
+	cat << EOF > $WOKRING_PATH/nebula_graph_console.sh
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+
+# Usage: nebula_graph_console.sh
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64;
+sudo docker run --rm -ti --network nebula-docker-compose_nebula-net --entrypoint=/bin/sh vesoft/nebula-console:v2.0.0-ga
+EOF
+	chmod +x $WOKRING_PATH/nebula_graph_console.sh
 	echo
-	echo "[NOTE] You can add below alias if you like to access nebula graph console via nebula_graph_console 😁:"
-	echo '>>> alias nebula_graph_console="export DOCKER_DEFAULT_PLATFORM=linux/amd64; docker run --rm -ti --network nebula-docker-compose_nebula-net --entrypoint=/bin/sh vesoft/nebula-console:v2.0.0-ga"'
+	echo "[INFO] Created nebula_graph_console.sh 😁:"
 	echo
 }
 
@@ -334,10 +347,14 @@ function main {
 	install_nebula_graph_studio
 
 	echo
-	echo "[INFO] Preparing Nebula Graph Console Docker Image..."
+	echo "[INFO] Preparing Nebula Graph Console Script..."
 	echo
 
 	install_nebula_graph_console
+
+	echo
+	echo "[INFO] Preparing Nebula-Up Uninstall Script..."
+	echo
 
 	create_uninstall_script
 }
