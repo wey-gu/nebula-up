@@ -1,3 +1,6 @@
 # docker repo
 nebula-docker-compose
 nebula-web-docker
+
+# generated scripts
+uninstall.sh

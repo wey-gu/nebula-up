@@ -16,7 +16,8 @@ iwr https://github.com/wey-gu/nebula-up/raw/main/install.ps1 -useb | iex
 
 TBD:
 - [ ] Finished Windows(Docker Desktop instead of the WSL 1&2 in initial phase) part, leveraging chocolatey package manager as homebrew was used in macOS
-- [ ] Fully optimized for CN users
+- [ ] Fully optimized for CN users, for now, git/apt/yum repo were not optimised, newly installed docker repo, brew repo were automatically optimised for CN internet access
 - [ ] With nebula-graph version specification support
+- [x] With uninstall/cleanup support
 - [ ] Packaging similar content into homebrew/chocolatey?
-- [ ] With uninstall/cleanup support
+- [ ] CI/UT

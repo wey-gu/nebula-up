@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Copyright (c) 2019 vesoft inc. All rights reserved.
+# Copyright (c) 2021 vesoft inc. All rights reserved.
 #
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
@@ -9,6 +9,15 @@ set -e
 # Usage: install.sh
 
 # Check Platform & Distribution
+
+function print_banner {
+	echo '.__   __.  _______ .______    __    __   __          ___            __    __  .______'
+	echo '|  \ |  | |   ____||   _  \  |  |  |  | |  |        /   \          |  |  |  | |   _  \'
+	echo '|   \|  | |  |__   |  |_)  | |  |  |  | |  |       /  ^  \   ______|  |  |  | |  |_)  |'
+	echo '|  . `  | |   __|  |   _  <  |  |  |  | |  |      /  /_\  \ |______|  |  |  | |   ___/'
+	echo '|  |\   | |  |____ |  |_)  | |  `--   | |   ----./  _____  \       |  `--   | |  |'
+	echo '|__| \__| |_______||______/   \______/  |_______/__/     \__\       \______/  | _|'
+}
 
 function get_platform {
 	case $(uname -ms) in
@@ -49,17 +58,17 @@ function is_CN_NETWORK {
 # Install Dependencies(docker, Package Manager) with Network Env Awareness
 
 function utility_exists {
-	which $1 1>/dev/null && true || false
+	which $1 1>/dev/null 2>/dev/null && true || false
 }
 
 function install_package_ubuntu {
-	sudo apt-get update
+	sudo apt-get update -y
 	sudo apt-get install -y $1
 }
 
 function install_package_centos {
-	sudo apt-get update
-	sudo yum install -y $1
+	sudo yum -y update
+	sudo yum -y install $1
 }
 
 function install_homebrew {
@@ -71,7 +80,7 @@ function install_homebrew {
 		HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/${BREW_TYPE}-bottles"
 	fi
 	echo
-	echo Installing Homebrew
+	echo "[INFO] Installing Homebrew"
 	echo
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
@@ -93,7 +102,7 @@ function install_package {
 function install_docker {
 	# For both Linux and Darwin cases, CN network was considerred
 	echo
-	echo "Starting Instlation of Docker"
+	echo "[INFO] Starting Instlation of Docker"
 	echo
 	case $PLATFORM in
 		*inux*)  utility_exists "wget" || install_package "wget" && sudo sh -c "$(wget https://get.docker.com -O -)" ;;
@@ -105,10 +114,37 @@ function install_docker_compose {
 	# Only Linux is needed, for macOS, Docker Desktop comes with compose out of box
 	COMPOSE_VERSION="1.29.0"
 	echo
-	echo "Starting Instlation of Docker-Compose"
+	echo "[INFO] Starting Instlation of Docker-Compose"
 	echo
 	sudo curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 	sudo chmod +x /usr/local/bin/docker-compose
+	sudo ln -s /usr/local/bin/docker-compose /sbin/docker-compose
+}
+
+function waiting_for_docker_engine_up {
+	echo
+	echo "[INFO] Waiting for Docker Engine to be up..."
+	echo
+
+	max_attempts=${MAX_ATTEMPTS-6}
+	timer=${INIT_TIMER-4}
+
+	while [[ $attempt < $max_attempts ]]
+	do
+		status=$(sudo docker ps 1>/dev/null 2>/dev/null && echo OK||echo NOK)
+		if [[ "$status" == "OK" ]]; then
+			break
+		fi
+		echo "[INFO] Docker Engine Check Attempt: ${attempt-0} Failed, Retrying in $timer Seconds..." 1>&2
+		sleep $timer
+		attempt=$(( attempt + 1 ))
+		timer=$(( timer * 2 ))
+	done
+
+	if [[ "$status" != "OK" ]]; then
+		echo "[ERROR] Failed to start Docker Engine, we are sorry about this :(" 1>&2
+		exit 1
+	fi
 }
 
 function start_docker {
@@ -116,6 +152,7 @@ function start_docker {
 		*inux*)  sudo systemctl start docker ;;
 		*arwin*) open -a Docker ;;
 	esac
+	waiting_for_docker_engine_up
 }
 
 function restart_docker {
@@ -123,6 +160,7 @@ function restart_docker {
 		*inux*)  sudo systemctl daemon-reload && sudo systemctl restart docker ;;
 		*arwin*) osascript -e 'quit app "Docker"' && open -a Docker ;;
 	esac
+	waiting_for_docker_engine_up
 }
 
 function configure_docker_cn_mirror {
@@ -141,6 +179,9 @@ EOF
 }
 
 function ensure_dependencies {
+	if ! utility_exists "git"; then
+		install_package "git"
+	fi
 	if ! utility_exists "docker"; then
 		install_docker
 		if is_CN_NETWORK; then
@@ -160,7 +201,7 @@ function ensure_dependencies {
 
 function check_ports_availability {
 	echo
-	echo "Checking Ports Availability"
+	echo "[INFO] Checking Ports Availability"
 	echo
 	# TBD
 }
@@ -169,7 +210,7 @@ function check_ports_availability {
 
 function waiting_for_nebula_graph_up {
 	echo
-	echo "Waiting for all nebula-graph containers to be healthy..."
+	echo "[INFO] Waiting for all nebula-graph containers to be healthy..."
 	echo
 	expected_containers_count_str="9"
 	healthy_containers_count_str=""
@@ -178,18 +219,18 @@ function waiting_for_nebula_graph_up {
 
 	while [[ $attempt < $max_attempts ]]
 	do
-		healthy_containers_count_str=$(docker ps --filter health=healthy |grep -v "CONTAINER ID"|wc -l|sed -e 's/^[[:space:]]*//')
+		healthy_containers_count_str=$(sudo docker ps --filter health=healthy |grep -v "CONTAINER ID"|wc -l|sed -e 's/^[[:space:]]*//')
 		if [[ "$healthy_containers_count_str" == "$expected_containers_count_str" ]]; then
 			break
 		fi
-		echo "Healthcheck Attempt: ${attempt-0} Failed, Retrying in $timer Seconds..." 1>&2
+		echo "[INFO] Nebula-Graph Containers Healthcheck Attempt: ${attempt-0} Failed, Retrying in $timer Seconds..." 1>&2
 		sleep $timer
 		attempt=$(( attempt + 1 ))
 		timer=$(( timer * 2 ))
 	done
 
 	if [[ "$healthy_containers_count_str" != "$expected_containers_count_str" ]]; then
-		echo "[ERROR] Failed to waiting for all containers to be healthy, check docker ps for details." 1>&2
+		echo "[ERROR] Failed to waiting for all containers to be healthy, check sudo docker ps for details." 1>&2
 	fi
 }
 
@@ -201,14 +242,14 @@ function install_nebula_graph {
 		git clone --branch v2.0.0 https://github.com/vesoft-inc/nebula-docker-compose.git
 	else
 		echo
-		echo "[WARN] $WOKRING_PATH/nebula-docker-compose already exists, existing repo will be reused"
+		echo "[WARN] $WOKRING_PATH/nebula-docker-compose already exists, existing repo will be reused" 1>&2
 		echo
 	fi
-	cd nebula-docker-compose && git checkout v2.0.0
+	cd nebula-docker-compose && git checkout v2.0.0 1>/dev/null 2>/dev/null
 	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
-	docker-compose pull
-	docker-compose up -d
+	sudo docker-compose pull
+	sudo docker-compose up -d
 
 	local MAX_ATTEMPTS=6
 	local INIT_TIMER=4
@@ -227,40 +268,78 @@ function install_nebula_graph_studio {
 		echo "[WARN] $WOKRING_PATH/nebula-web-docker already exists, existing repo will be reused"
 		echo
 	fi
-	cd nebula-web-docker && git checkout v2
+	cd nebula-web-docker && git checkout v2 1>/dev/null 2>/dev/null
 	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
-	docker-compose pull
-	docker-compose up -d
+	sudo docker-compose pull
+	sudo docker-compose up -d
 }
 
 # Deploy Nebula Console
 
 function install_nebula_graph_console {
 	echo
-	echo "Pulling nebula-console docker image"
+	echo "[INFO] Pulling nebula-console docker image"
 	echo
-	docker pull vesoft/nebula-console:v2.0.0-ga
+	sudo docker pull vesoft/nebula-console:v2.0.0-ga 1>/dev/null 2>/dev/null
 	echo
-	echo "Add below alias if you like to:"
-	echo 'alias nebula_graph_console="export DOCKER_DEFAULT_PLATFORM=linux/amd64; docker run --rm -ti --network nebula-docker-compose_nebula-net --entrypoint=/bin/sh vesoft/nebula-console:v2.0.0-ga"'
+	echo "[NOTE] You can add below alias if you like to access nebula graph console via nebula_graph_console 😁:"
+	echo '>>> alias nebula_graph_console="export DOCKER_DEFAULT_PLATFORM=linux/amd64; docker run --rm -ti --network nebula-docker-compose_nebula-net --entrypoint=/bin/sh vesoft/nebula-console:v2.0.0-ga"'
 	echo
 }
 
+# Create Uninstall Script
+
+function create_uninstall_script {
+	cat << EOF > $WOKRING_PATH/uninstall.sh
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+
+# Usage: uninstall.sh
+
+cd $WOKRING_PATH/nebula-web-docker && sudo docker-compose down
+cd $WOKRING_PATH/nebula-docker-compose && sudo docker-compose down
+sudo rm -fr $WOKRING_PATH/nebula-web-docker $WOKRING_PATH/nebula-docker-compose
+EOF
+	chmod +x $WOKRING_PATH/uninstall.sh
+}
+
 function main {
+	print_banner
+
 	WOKRING_PATH=$(pwd)
 	PLATFORM=$(get_platform)
 	CN_NETWORK=false
 	if is_CN_NETWORK; then
 		CN_NETWORK=true
 	fi
+	echo
+	echo "[INFO] Ensuring Depedencies..."
+	echo
 	ensure_dependencies
+
+	echo
+	echo "[INFO] Boostraping Nebula Graph Cluster with Docker Compose..."
+	echo
 
 	install_nebula_graph
 
+	echo
+	echo "[INFO] Boostraping Nebula Graph Studio with Docker Compose..."
+	echo
+
 	install_nebula_graph_studio
 
+	echo
+	echo "[INFO] Preparing Nebula Graph Console Docker Image..."
+	echo
+
 	install_nebula_graph_console
+
+	create_uninstall_script
 }
 
 main
