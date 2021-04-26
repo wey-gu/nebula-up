@@ -318,12 +318,12 @@ function install_nebula_graph {
 
 function install_nebula_graph_studio {
 	cd $WOKRING_PATH
-	if [ ! -d "$WOKRING_PATH/nebula-web-docker" ]; then
-		git clone --branch v2 https://github.com/vesoft-inc/nebula-web-docker.git
+	if [ ! -d "$WOKRING_PATH/nebula-graph-studio" ]; then
+		git clone --branch v2 https://github.com/vesoft-inc/nebula-graph-studio.git
 	else
-			logger_warn "$WOKRING_PATH/nebula-web-docker already exists, existing repo will be reused"
+			logger_warn "$WOKRING_PATH/nebula-graph-studio already exists, existing repo will be reused"
 		fi
-	cd nebula-web-docker && git checkout v2 1>/dev/null 2>/dev/null
+	cd nebula-graph-studio && git checkout v2 1>/dev/null 2>/dev/null
 	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
 	docker-compose pull
@@ -365,9 +365,9 @@ function create_uninstall_script {
 # Usage: uninstall.sh
 
 echo " ℹ️   Cleaning Up Files under $WOKRING_PATH..."
-cd $WOKRING_PATH/nebula-web-docker 2>/dev/null && sudo docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-graph-studio 2>/dev/null && sudo docker-compose down 2>/dev/null
 cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null && sudo docker-compose down 2>/dev/null
-sudo rm -fr $WOKRING_PATH/nebula-web-docker $WOKRING_PATH/nebula-docker-compose 2>/dev/null
+sudo rm -fr $WOKRING_PATH/nebula-graph-studio $WOKRING_PATH/nebula-docker-compose 2>/dev/null
 echo "┌────────────────────────────────────────┐"
 echo "│ 🌌 Nebula-Up Uninstallation Finished   │"
 echo "└────────────────────────────────────────┘"
