@@ -10,6 +10,14 @@ set -e
 
 # Check Platform & Distribution
 
+function validate_version {
+	if [ -z "${dict[$1]}" ]; then
+		false
+	else
+		true
+	fi
+}
+
 function logger_info {
 	echo
 	echo " ℹ️   " $1
@@ -147,7 +155,7 @@ function install_package {
 	case $PLATFORM in
 		*arwin*) install_package_mac $1;;
 		*inux*)  install_package_$(get_distribution) $1;;
-    esac
+	esac
 }
 
 function install_docker {
@@ -237,8 +245,8 @@ EOF
 	fi
 	docker ps 1>/dev/null 2>/dev/null || \
 		logger_error "Ensuring docker Permission Failed, please try: \n	\
-	    	option 0: execute this command and retry:\n		newgrp docker\n	\
-	    	option 1: relogin current shell session and retry install.sh \n"
+				option 0: execute this command and retry:\n		$ newgrp docker\n	\
+				option 1: relogin current shell session and retry install.sh \n"
 }
 
 function ensure_dependencies {
@@ -301,11 +309,11 @@ function install_nebula_graph {
 	# https://github.com/vesoft-inc/nebula-docker-compose
 	cd $WOKRING_PATH
 	if [ ! -d "$WOKRING_PATH/nebula-docker-compose" ]; then
-		git clone --branch v2.0.0 https://github.com/vesoft-inc/nebula-docker-compose.git
+		git clone --branch $NEBULA_VERSION https://github.com/vesoft-inc/nebula-docker-compose.git
 	else
-			logger_warn "$WOKRING_PATH/nebula-docker-compose already exists, existing repo will be reused"
+		logger_warn "$WOKRING_PATH/nebula-docker-compose already exists, existing repo will be reused"
 		fi
-	cd nebula-docker-compose && git checkout v2.0.0 1>/dev/null 2>/dev/null
+	cd nebula-docker-compose && git checkout $NEBULA_VERSION 1>/dev/null 2>/dev/null
 	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
 	docker-compose pull
@@ -318,12 +326,12 @@ function install_nebula_graph {
 
 function install_nebula_graph_studio {
 	cd $WOKRING_PATH
-	if [ ! -d "$WOKRING_PATH/nebula-graph-studio" ]; then
-		git clone --branch v2 https://github.com/vesoft-inc/nebula-graph-studio.git
-	else
-			logger_warn "$WOKRING_PATH/nebula-graph-studio already exists, existing repo will be reused"
-		fi
-	cd nebula-graph-studio && git checkout v2 1>/dev/null 2>/dev/null
+	if [ -d "$WOKRING_PATH/nebula-graph-studio-v2" ]; then
+		rm -fr $WOKRING_PATH/nebula-graph-studio-v2
+	fi
+	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/nebula-graph-studio-v2.tar.gz 1>/dev/null 2>/dev/null
+	mkdir nebula-graph-studio-v2 && tar -zxvf nebula-graph-studio-v2.tar.gz -C nebula-graph-studio-v2 1>/dev/null 2>/dev/null
+	cd nebula-graph-studio-v2
 	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
 	docker-compose pull
@@ -334,7 +342,7 @@ function install_nebula_graph_studio {
 
 function install_nebula_graph_console {
 	logger_info "Pulling nebula-console docker image"
-	docker pull vesoft/nebula-console:v2.0.0-ga 1>/dev/null 2>/dev/null
+	docker pull vesoft/nebula-console:${CONSOLE_VERSION} 1>/dev/null 2>/dev/null
 
 	sudo bash -c "cat > $WOKRING_PATH/console.sh" << EOF
 #!/usr/bin/env bash
@@ -346,7 +354,7 @@ function install_nebula_graph_console {
 # Usage: console.sh
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64;
-sudo docker run --rm -ti --network nebula-docker-compose_nebula-net --entrypoint=/bin/sh vesoft/nebula-console:v2.0.0-ga
+sudo docker run --rm -ti --network nebula-docker-compose_nebula-net --entrypoint=/bin/sh vesoft/nebula-console:${CONSOLE_VERSION}
 EOF
 	sudo chmod +x $WOKRING_PATH/console.sh
 	logger_info "Created console.sh 😁:"
@@ -365,9 +373,9 @@ function create_uninstall_script {
 # Usage: uninstall.sh
 
 echo " ℹ️   Cleaning Up Files under $WOKRING_PATH..."
-cd $WOKRING_PATH/nebula-graph-studio 2>/dev/null && sudo docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-graph-studio-v2 2>/dev/null && sudo docker-compose down 2>/dev/null
 cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null && sudo docker-compose down 2>/dev/null
-sudo rm -fr $WOKRING_PATH/nebula-graph-studio $WOKRING_PATH/nebula-docker-compose 2>/dev/null
+sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v2 $WOKRING_PATH/nebula-docker-compose 2>/dev/null
 echo "┌────────────────────────────────────────┐"
 echo "│ 🌌 Nebula-Up Uninstallation Finished   │"
 echo "└────────────────────────────────────────┘"
@@ -415,8 +423,16 @@ function print_footer_error {
 
 function main {
 	print_banner
+	if [ -z "$NEBULA_VERSION" ]; then
+		logger_info "VERSION not provided, using 2.0 GA..."
+		NEBULA_VERSION="v2.0.0"
+	else
+		if ! validate_version; then
+			logger_error "Wrong Version Provided!"
+		fi
+	fi
 
-    CURRENT_PATH="$pwd"
+	CURRENT_PATH="$pwd"
 	WOKRING_PATH="$HOME/.nebula-up"
 	mkdir -p $WOKRING_PATH && cd $WOKRING_PATH
 	PLATFORM=$(get_platform)
@@ -425,7 +441,7 @@ function main {
 		CN_NETWORK=true
 	fi
 
-    excute_step verify_sudo_permission
+	excute_step verify_sudo_permission
 	logger_info "Preparing Nebula-Up Uninstall Script..."
 	excute_step create_uninstall_script
 
@@ -446,4 +462,13 @@ function main {
 	print_footer
 }
 
+#declare -A VERSION_MAP_STUDIO
+declare -A VERSION_MAP_CONSOLE
+#VERSION_MAP_STUDIO["v2.0.0"]="v2"
+VERSION_MAP_CONSOLE["v2.0.0"]="v2.0.0-ga"
+
+NEBULA_VERSION=$1
+echo $NEBULA_VERSION
+#STUDIO_VERSION=$VERSION_MAP_STUDIO["${NEBULA_VERSION}"]
+CONSOLE_VERSION=$VERSION_MAP_CONSOLE["${NEBULA_VERSION}"]
 main

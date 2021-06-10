@@ -9,14 +9,14 @@ Also, it's optimized to leverage China Repo Mirrors(docker, brew, gitee, etc...)
 macOS and Linux with Shell:
 
 ```bash
-curl -fsSL https://github.com/wey-gu/nebula-up/raw/main/install.sh | bash
+curl -fsSL nebula-up.siwei.io/install.sh | bash
 ```
 ![nebula-up-demo-shell](./images/nebula-up-demo-shell.png)
 
 Windows with PowerShell(Working In Progress):
 
 ```powershell
-iwr https://github.com/wey-gu/nebula-up/raw/main/install.ps1 -useb | iex
+iwr nebula-up.siwei.io/install.ps1 -useb | iex
 ```
 
 TBD:
