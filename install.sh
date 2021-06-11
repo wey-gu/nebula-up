@@ -38,7 +38,7 @@ function logger_error {
 }
 
 function logger_ok {
-	echo "[✔️ ] " $1
+	echo " ✔️   " $1
 }
 
 function excute_step {
@@ -463,12 +463,13 @@ function main {
 }
 
 #declare -A VERSION_MAP_STUDIO
-declare -A VERSION_MAP_CONSOLE
+#declare -A VERSION_MAP_CONSOLE
 #VERSION_MAP_STUDIO["v2.0.0"]="v2"
-VERSION_MAP_CONSOLE["v2.0.0"]="v2.0.0-ga"
+#VERSION_MAP_CONSOLE["v2.0.0"]="v2.0.0-ga"
 
 NEBULA_VERSION=$1
 echo $NEBULA_VERSION
 #STUDIO_VERSION=$VERSION_MAP_STUDIO["${NEBULA_VERSION}"]
-CONSOLE_VERSION=$VERSION_MAP_CONSOLE["${NEBULA_VERSION}"]
+#CONSOLE_VERSION=$VERSION_MAP_CONSOLE["${NEBULA_VERSION}"]
+CONSOLE_VERSION="v2.0.0-ga"
 main
