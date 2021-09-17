@@ -424,7 +424,7 @@ function print_footer_error {
 function main {
 	print_banner
 	if [ -z "$NEBULA_VERSION" ]; then
-		logger_info "VERSION not provided, using 2.0 GA..."
+		logger_info "VERSION not provided, using v2.5.0..."
 		NEBULA_VERSION="v2.5.0"
 	else
 		if ! validate_version; then
