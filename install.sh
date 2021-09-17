@@ -326,12 +326,12 @@ function install_nebula_graph {
 
 function install_nebula_graph_studio {
 	cd $WOKRING_PATH
-	if [ -d "$WOKRING_PATH/nebula-graph-studio-v2" ]; then
-		rm -fr $WOKRING_PATH/nebula-graph-studio-v2
+	if [ -d "$WOKRING_PATH/nebula-graph-studio-v3" ]; then
+		rm -fr $WOKRING_PATH/nebula-graph-studio-v3
 	fi
-	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/nebula-graph-studio-v2.tar.gz 1>/dev/null 2>/dev/null
-	mkdir nebula-graph-studio-v2 && tar -zxvf nebula-graph-studio-v2.tar.gz -C nebula-graph-studio-v2 1>/dev/null 2>/dev/null
-	cd nebula-graph-studio-v2
+	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/nebula-graph-studio-v3.tar.gz 1>/dev/null 2>/dev/null
+	mkdir nebula-graph-studio-v3 && tar -zxvf nebula-graph-studio-v3.tar.gz -C nebula-graph-studio-v3 1>/dev/null 2>/dev/null
+	cd nebula-graph-studio-v3
 	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
 	docker-compose pull
@@ -373,9 +373,9 @@ function create_uninstall_script {
 # Usage: uninstall.sh
 
 echo " ℹ️   Cleaning Up Files under $WOKRING_PATH..."
-cd $WOKRING_PATH/nebula-graph-studio-v2 2>/dev/null && sudo docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-graph-studio-v3 2>/dev/null && sudo docker-compose down 2>/dev/null
 cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null && sudo docker-compose down 2>/dev/null
-sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v2 $WOKRING_PATH/nebula-docker-compose 2>/dev/null
+sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v3 $WOKRING_PATH/nebula-docker-compose 2>/dev/null
 echo "┌────────────────────────────────────────┐"
 echo "│ 🌌 Nebula-Up Uninstallation Finished   │"
 echo "└────────────────────────────────────────┘"
