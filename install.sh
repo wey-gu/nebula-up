@@ -425,7 +425,7 @@ function main {
 	print_banner
 	if [ -z "$NEBULA_VERSION" ]; then
 		logger_info "VERSION not provided, using 2.0 GA..."
-		NEBULA_VERSION="v2.0.0"
+		NEBULA_VERSION="v2.5.0"
 	else
 		if ! validate_version; then
 			logger_error "Wrong Version Provided!"
@@ -471,5 +471,5 @@ NEBULA_VERSION=$1
 echo $NEBULA_VERSION
 #STUDIO_VERSION=$VERSION_MAP_STUDIO["${NEBULA_VERSION}"]
 #CONSOLE_VERSION=$VERSION_MAP_CONSOLE["${NEBULA_VERSION}"]
-CONSOLE_VERSION="v2.0.0-ga"
+CONSOLE_VERSION="v2.5.0"
 main
