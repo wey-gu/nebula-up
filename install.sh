@@ -326,12 +326,12 @@ function install_nebula_graph {
 
 function install_nebula_graph_studio {
 	cd $WOKRING_PATH
-	if [ -d "$WOKRING_PATH/nebula-graph-studio-v3" ]; then
-		rm -fr $WOKRING_PATH/nebula-graph-studio-v3
+	if [ -d "$WOKRING_PATH/nebula-graph-studio-v3.1.0" ]; then
+		rm -fr $WOKRING_PATH/nebula-graph-studio-v3.1.0
 	fi
-	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/nebula-graph-studio-v3.tar.gz 1>/dev/null 2>/dev/null
-	mkdir nebula-graph-studio-v3 && tar -zxvf nebula-graph-studio-v3.tar.gz -C nebula-graph-studio-v3 1>/dev/null 2>/dev/null
-	cd nebula-graph-studio-v3
+	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/nebula-graph-studio-v3.1.0.tar.gz 1>/dev/null 2>/dev/null
+	mkdir nebula-graph-studio-v3.1.0 && tar -zxvf nebula-graph-studio-v3.1.0.tar.gz -C nebula-graph-studio-v3.1.0 1>/dev/null 2>/dev/null
+	cd nebula-graph-studio-v3.1.0
 	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
 	docker-compose pull
@@ -373,9 +373,9 @@ function create_uninstall_script {
 # Usage: uninstall.sh
 
 echo " ℹ️   Cleaning Up Files under $WOKRING_PATH..."
-cd $WOKRING_PATH/nebula-graph-studio-v3 2>/dev/null && sudo docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-graph-studio-v3.1.0 2>/dev/null && sudo docker-compose down 2>/dev/null
 cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null && sudo docker-compose down 2>/dev/null
-sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v3 $WOKRING_PATH/nebula-docker-compose 2>/dev/null
+sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v3.1.0 $WOKRING_PATH/nebula-docker-compose 2>/dev/null
 echo "┌────────────────────────────────────────┐"
 echo "│ 🌌 Nebula-Up Uninstallation Finished   │"
 echo "└────────────────────────────────────────┘"
@@ -424,8 +424,8 @@ function print_footer_error {
 function main {
 	print_banner
 	if [ -z "$NEBULA_VERSION" ]; then
-		logger_info "VERSION not provided, using v2.5.0..."
-		NEBULA_VERSION="v2.5.0"
+		logger_info "VERSION not provided, using v2.6.0..."
+		NEBULA_VERSION="v2.6.0"
 	else
 		if ! validate_version; then
 			logger_error "Wrong Version Provided!"
@@ -471,5 +471,5 @@ NEBULA_VERSION=$1
 echo $NEBULA_VERSION
 #STUDIO_VERSION=$VERSION_MAP_STUDIO["${NEBULA_VERSION}"]
 #CONSOLE_VERSION=$VERSION_MAP_CONSOLE["${NEBULA_VERSION}"]
-CONSOLE_VERSION="v2.5.0"
+CONSOLE_VERSION="v2.6.0"
 main
