@@ -163,7 +163,7 @@ function install_docker {
 	logger_info "Starting Instlation of Docker"
 	case $PLATFORM in
 		*inux*)  utility_exists "wget" || install_package "wget" && sudo sh -c "$(wget https://get.docker.com -O -)" ;;
-		*arwin*) install_package "docker" ;;
+		*arwin*) utility_exists "wget" || install_package "wget" && install_package "docker" ;;
 	esac
 }
 
