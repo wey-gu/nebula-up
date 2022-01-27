@@ -425,8 +425,8 @@ function print_footer_error {
 function main {
 	print_banner
 	if [ -z "$NEBULA_VERSION" ]; then
-		logger_info "VERSION not provided, using v2.6.0..."
-		NEBULA_VERSION="v2.6.0"
+		logger_info "VERSION not provided, using v2.6..."
+		NEBULA_VERSION="v2.6"
 	else
 		if ! validate_version; then
 			logger_error "Wrong Version Provided!"
