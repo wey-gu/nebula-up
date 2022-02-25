@@ -10,14 +10,6 @@ set -e
 
 # Check Platform & Distribution
 
-function validate_version {
-	if [ -z "${dict[$1]}" ]; then
-		false
-	else
-		true
-	fi
-}
-
 function logger_info {
 	echo
 	echo " ℹ️   " $1
@@ -330,12 +322,17 @@ function install_nebula_graph {
 
 function install_nebula_graph_studio {
 	cd $WOKRING_PATH
-	if [ -d "$WOKRING_PATH/nebula-graph-studio-v3.1.0" ]; then
-		rm -fr $WOKRING_PATH/nebula-graph-studio-v3.1.0
+	if [ -d "$WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION" ]; then
+		rm -fr $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION
 	fi
-	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/nebula-graph-studio-v3.1.0.tar.gz 1>/dev/null 2>/dev/null
-	mkdir nebula-graph-studio-v3.1.0 && tar -zxvf nebula-graph-studio-v3.1.0.tar.gz -C nebula-graph-studio-v3.1.0 1>/dev/null 2>/dev/null
-	cd nebula-graph-studio-v3.1.0
+	if [ $STUDIO_VERSION = "3.1.0" ]; then
+		VERSION_FOLDER=""
+	else
+		VERSION_FOLDER="$STUDIO_VERSION/"
+	fi
+	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/${VERSION_FOLDER}nebula-graph-studio-v$STUDIO_VERSION.tar.gz 1>/dev/null 2>/dev/null
+	mkdir nebula-graph-studio-v$STUDIO_VERSION && tar -zxvf nebula-graph-studio-v$STUDIO_VERSION.tar.gz -C nebula-graph-studio-v$STUDIO_VERSION 1>/dev/null 2>/dev/null
+	cd nebula-graph-studio-v$STUDIO_VERSION
 	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
 	docker-compose pull
@@ -377,9 +374,9 @@ function create_uninstall_script {
 # Usage: uninstall.sh
 
 echo " ℹ️   Cleaning Up Files under $WOKRING_PATH..."
-cd $WOKRING_PATH/nebula-graph-studio-v3.1.0 2>/dev/null && sudo docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION 2>/dev/null && sudo docker-compose down 2>/dev/null
 cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null && sudo docker-compose down 2>/dev/null
-sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v3.1.0 $WOKRING_PATH/nebula-docker-compose 2>/dev/null
+sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION $WOKRING_PATH/nebula-docker-compose 2>/dev/null
 echo "┌────────────────────────────────────────┐"
 echo "│ 🌌 Nebula-Up Uninstallation Finished   │"
 echo "└────────────────────────────────────────┘"
@@ -427,14 +424,20 @@ function print_footer_error {
 
 function main {
 	print_banner
-	if [ -z "$NEBULA_VERSION" ]; then
-		logger_info "VERSION not provided, using v2.6..."
+	case $NEBULA_VERSION in
+	v3.0.0 | 3.0.0 | 3.0 )
+		NEBULA_VERSION="v3.0.0"
+		STUDIO_VERSION="3.2.1"
+		CONSOLE_VERSION="v3.0.0"
+		;;
+	*)
+	    logger_info "VERSION not provided"
 		NEBULA_VERSION="v2.6"
-	else
-		if ! validate_version; then
-			logger_error "Wrong Version Provided!"
-		fi
-	fi
+		STUDIO_VERSION="3.1.0"
+		CONSOLE_VERSION="v2.6.0"
+		;;
+	esac
+	logger_info "Installing Nebula Graph $NEBULA_VERSION"
 
 	CURRENT_PATH="$pwd"
 	WOKRING_PATH="$HOME/.nebula-up"
@@ -466,14 +469,5 @@ function main {
 	print_footer
 }
 
-#declare -A VERSION_MAP_STUDIO
-#declare -A VERSION_MAP_CONSOLE
-#VERSION_MAP_STUDIO["v2.0.0"]="v2"
-#VERSION_MAP_CONSOLE["v2.0.0"]="v2.0.0-ga"
-
 NEBULA_VERSION=$1
-echo $NEBULA_VERSION
-#STUDIO_VERSION=$VERSION_MAP_STUDIO["${NEBULA_VERSION}"]
-#CONSOLE_VERSION=$VERSION_MAP_CONSOLE["${NEBULA_VERSION}"]
-CONSOLE_VERSION="v2.6.0"
 main
