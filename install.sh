@@ -162,8 +162,8 @@ function install_docker {
 	# For both Linux and Darwin cases, CN network was considerred
 	logger_info "Starting Instlation of Docker"
 	case $PLATFORM in
-		*inux*)  utility_exists "wget" || install_package "wget" && sudo sh -c "$(wget https://get.docker.com -O -)" ;;
-		*arwin*) utility_exists "wget" || install_package "wget" && install_package "docker" ;;
+		*inux*)  sudo sh -c "$(wget https://get.docker.com -O -)" ;;
+		*arwin*) install_package "docker" ;;
 	esac
 }
 
@@ -253,6 +253,9 @@ EOF
 function ensure_dependencies {
 	if ! utility_exists "git"; then
 		install_package "git"
+	fi
+	if ! utility_exists "wget"; then
+	  install_package "wget"
 	fi
 	if ! utility_exists "docker"; then
 		install_docker
