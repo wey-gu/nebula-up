@@ -425,7 +425,7 @@ function print_footer_error {
 function main {
 	print_banner
 	case $NEBULA_VERSION in
-	v3.0.1 | 3.0.1 | 3.0 )
+	v3.0.1 | 3.0.1 | 3.0 | v3.0 )
 		NEBULA_VERSION="v3.0.1"
 		STUDIO_VERSION="3.2.2"
 		CONSOLE_VERSION="v3.0.0"
