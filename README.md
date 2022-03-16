@@ -16,7 +16,7 @@ curl -fsSL nebula-up.siwei.io/install.sh | bash
 Note: you could specify version of Nebula Graph like:
 
 ```bash
-curl -fsSL nebula-up.siwei.io/install.sh | bash -s -- v3.0.0
+curl -fsSL nebula-up.siwei.io/install.sh | bash -s -- v3.0
 ```
 
 ~~Windows with PowerShell~~(Working In Progress):
