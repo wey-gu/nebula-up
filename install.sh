@@ -303,6 +303,7 @@ function waiting_for_nebula_graph_up {
 function install_nebula_graph {
 	# TBD, considerring create gitee mirror for git repo? if is_CN_NETWORK is true.
 	# https://github.com/vesoft-inc/nebula-docker-compose
+	docker network create nebula-net || true
 	cd $WOKRING_PATH
 	if [ ! -d "$WOKRING_PATH/nebula-docker-compose" ]; then
 		git clone --branch $NEBULA_VERSION https://github.com/vesoft-inc/nebula-docker-compose.git
@@ -310,7 +311,6 @@ function install_nebula_graph {
 		logger_warn "$WOKRING_PATH/nebula-docker-compose already exists, existing repo will be reused"
 		fi
 	cd nebula-docker-compose && git checkout $NEBULA_VERSION 1>/dev/null 2>/dev/null
-	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
 	docker-compose pull
 	docker-compose up -d

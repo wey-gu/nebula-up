@@ -1,0 +1,39 @@
+clusters:
+  - name: nebula
+    instances:
+      - name: metad0
+        endpointIP: metad0
+        endpointPort: 19559
+        componentType: metad
+      - name: metad1
+        endpointIP: metad1
+        endpointPort: 19559
+        componentType: metad
+      - name: metad2
+        endpointIP: metad2
+        endpointPort: 19559
+        componentType: metad
+      - name: graphd
+        endpointIP: graphd
+        endpointPort: 19669
+        componentType: graphd
+      - name: graphd1
+        endpointIP: graphd1
+        endpointPort: 19669
+        componentType: graphd
+      - name: graphd2
+        endpointIP: graphd2
+        endpointPort: 19669
+        componentType: graphd
+      - name: storaged0
+        endpointIP: storaged0
+        endpointPort: 19779
+        componentType: storaged
+      - name: storaged1
+        endpointIP: storaged1
+        endpointPort: 19779
+        componentType: storaged
+      - name: storaged2
+        endpointIP: storaged2
+        endpointPort: 19779
+        componentType: storaged
