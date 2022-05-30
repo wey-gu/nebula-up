@@ -19,6 +19,27 @@ Note: you could specify version of Nebula Graph like:
 curl -fsSL nebula-up.siwei.io/install.sh | bash -s -- v2.6
 ```
 
+## All-in-one mode
+
+Note: you could install with all-in-one mode, where other Nebula Toolchain provided packages will be installed with `nebula-up` as well.
+
+Supported tools:
+- [x] Nebula Dashboard
+- [x] Nebula Graph Studio
+- [x] Nebula Graph Console
+- [ ] Nebula BR(backup & restore)
+- [ ] Nebula Graph Spark utils
+  - [ ] Nebula Graph Spark Connector/PySpark
+  - [ ] Nebula Graph Algorithm
+  - [ ] Nebula Graph Exchange
+- [ ] Nebula Graph Importer
+- [ ] Nebula Graph Fulltext Search
+
+
+```bash
+curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash
+```
+
 ~~Windows with PowerShell~~(Working In Progress):
 
 ```powershell

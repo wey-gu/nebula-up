@@ -307,10 +307,13 @@ function install_nebula_graph {
 	cd $WOKRING_PATH
 	if [ ! -d "$WOKRING_PATH/nebula-docker-compose" ]; then
 		git clone --branch $NEBULA_VERSION https://github.com/vesoft-inc/nebula-docker-compose.git
+        grep "external" nebula-docker-compose/docker-compose.yml > /dev/null 2>&1 || \
+            echo "    external: true" >> nebula-docker-compose/docker-compose.yml
 	else
 		logger_warn "$WOKRING_PATH/nebula-docker-compose already exists, existing repo will be reused"
 		fi
 	cd nebula-docker-compose && git checkout $NEBULA_VERSION 1>/dev/null 2>/dev/null
+	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
 	docker-compose pull
 	docker-compose up -d
 
@@ -383,6 +386,26 @@ EOF
 	sudo chmod +x $WOKRING_PATH/uninstall.sh
 }
 
+function install_nebula_graph_dashboard {
+    # if DASHBOARD is not true, then skip, else continue to install.
+    if [ "$DASHBOARD" != "true" ]; then
+        logger_info "Skip nebula-graph-dashboard installation in current mode: $MODE"
+        return
+    fi
+    # if DASHBOARD is true, then continue to install.
+    logger_info "Installing nebula-graph-dashboard..."
+	cd $WOKRING_PATH
+	if [ ! -d "$WOKRING_PATH/nebula-up" ]; then
+		git clone https://github.com/wey-gu/nebula-up.git
+	else
+		logger_warn "$WOKRING_PATH/nebula-up already exists, existing repo will be reused"
+		fi
+	cd nebula-up && git stash && git pull 1>/dev/null 2>/dev/null
+	docker-compose pull
+	docker-compose up -d
+
+}
+
 function print_footer {
 
 	echo "┌────────────────────────────────────────┐"
@@ -392,9 +415,13 @@ function print_footer {
 	echo "│ 🎉 Congrats! Your Nebula is Up now!    │"
 	echo "│    $ cd ~/.nebula-up                   │"
 	echo "│                                        │"
-	echo "│ 🌏 You can access it from browser:     │"
+	echo "│ 🌏 Visit Studio From Web Browser:      │"
 	echo "│      http://127.0.0.1:7001             │"
 	echo "│      http://<other_interface>:7001     │"
+	echo "│                                        │"
+	echo "│ ⚙ Visit Dashboard From Web Browser:    │"
+	echo "│      http://127.0.0.1:7003             │"
+	echo "│      http://<other_interface>:7003     │"
 	echo "│                                        │"
 	echo "│ 🔥 Or access via Nebula Console:       │"
 	echo "│    $ ~/.nebula-up/console.sh           │"
@@ -424,29 +451,12 @@ function print_footer_error {
 function main {
 	print_banner
 	case $NEBULA_VERSION in
-
 	v3.1 | 3.1 | 3.1.0 | v3 )
 		NEBULA_VERSION="v3.1.0"
 		STUDIO_VERSION="3.2.3"
 		CONSOLE_VERSION="v3.0.0"
 		;;
 
-	v3.0.1 | 3.0.1 | 3.0 | v3.0 )
-		NEBULA_VERSION="v3.0.1"
-		STUDIO_VERSION="3.2.3"
-		CONSOLE_VERSION="v3.0.0"
-		;;
-	v3.0.0 | 3.0.0 )
-		NEBULA_VERSION="v3.0.0"
-		STUDIO_VERSION="3.2.3"
-		CONSOLE_VERSION="v3.0.0"
-		;;
-	v2.6 | 2.6 | 2.6.3 | v2.6.3 | 2.6.* | v2.6.* )
-	    logger_info "VERSION not provided"
-		NEBULA_VERSION="v2.6"
-		STUDIO_VERSION="3.1.0"
-		CONSOLE_VERSION="v2.6.0"
-		;;
 	*)
 	    logger_info "VERSION not provided"
 		NEBULA_VERSION="v3.1.0"
@@ -455,6 +465,17 @@ function main {
 		;;
 	esac
 	logger_info "Installing Nebula Graph $NEBULA_VERSION"
+
+	case $MODE in
+	all )
+		DASHBOARD="true"
+		;;
+
+	*)
+	    logger_info "Mode not provided, default to all-in-one"
+		DASHBOARD="true"
+		;;
+	esac
 
 	CURRENT_PATH="$pwd"
 	WOKRING_PATH="$HOME/.nebula-up"
@@ -481,10 +502,14 @@ function main {
 	logger_info "Preparing Nebula Graph Console Script..."
 	excute_step install_nebula_graph_console
 
+	logger_info "Installing Nebula Graph Dashboard..."
+	excute_step install_nebula_graph_dashboard
+
 	excute_step waiting_for_nebula_graph_up
 
 	print_footer
 }
 
 NEBULA_VERSION=$1
+MODE=$2
 main
