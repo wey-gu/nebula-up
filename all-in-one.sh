@@ -307,8 +307,8 @@ function install_nebula_graph {
 	cd $WOKRING_PATH
 	if [ ! -d "$WOKRING_PATH/nebula-docker-compose" ]; then
 		git clone --branch $NEBULA_VERSION https://github.com/vesoft-inc/nebula-docker-compose.git
-        grep "external" nebula-docker-compose/docker-compose.yml > /dev/null 2>&1 || \
-            echo "    external: true" >> nebula-docker-compose/docker-compose.yaml
+		grep "external" nebula-docker-compose/docker-compose.yml > /dev/null 2>&1 || \
+			echo "    external: true" >> nebula-docker-compose/docker-compose.yaml
 	else
 		logger_warn "$WOKRING_PATH/nebula-docker-compose already exists, existing repo will be reused"
 		fi
@@ -378,6 +378,9 @@ function create_uninstall_script {
 echo " ℹ️   Cleaning Up Files under $WOKRING_PATH..."
 cd $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION 2>/dev/null && sudo docker-compose down 2>/dev/null
 cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null && sudo docker-compose down 2>/dev/null
+cd $WOKRING_PATH/dashboard 2>/dev/null && sudo docker-compose down 2>/dev/null
+cd $WOKRING_PATH/spark 2>/dev/null && sudo docker-compose down 2>/dev/null
+
 sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION $WOKRING_PATH/nebula-docker-compose 2>/dev/null
 echo "┌────────────────────────────────────────┐"
 echo "│ 🌌 Nebula-Up Uninstallation Finished   │"
@@ -387,13 +390,13 @@ EOF
 }
 
 function install_nebula_graph_dashboard {
-    # if DASHBOARD is not true, then skip, else continue to install.
-    if [ "$DASHBOARD" != "true" ]; then
-        logger_info "Skip nebula-graph-dashboard installation in current mode: $MODE"
-        return
-    fi
-    # if DASHBOARD is true, then continue to install.
-    logger_info "Installing nebula-graph-dashboard..."
+	# if DASHBOARD is not true, then skip, else continue to install.
+	if [ "$DASHBOARD" != "true" ]; then
+		logger_info "Skip nebula-graph-dashboard installation in current mode: $MODE"
+		return
+	fi
+	# if DASHBOARD is true, then continue to install.
+	logger_info "Installing nebula-graph-dashboard..."
 	cd $WOKRING_PATH
 	if [ ! -d "$WOKRING_PATH/nebula-up" ]; then
 		git clone https://github.com/wey-gu/nebula-up.git
@@ -401,10 +404,33 @@ function install_nebula_graph_dashboard {
 		logger_warn "$WOKRING_PATH/nebula-up already exists, existing repo will be reused"
 	fi
 	cd nebula-up && git stash && git pull 1>/dev/null 2>/dev/null
-    cd dasbhoard
+	cd dasbhoard
 	docker-compose pull
 	docker-compose up -d
 
+}
+
+function install_nebula_graph_spark {
+	# if SPARK is not true, then skip, else continue to install.
+	if [ "$SPARK" != "true" ]; then
+		logger_info "Skip Spark env installation in current mode: $MODE"
+		return
+	fi
+	# if SPARK is true, then continue to install.
+	logger_info "Installing Nebula Spark env: Spark Connector, Exchange, Algorithm..."
+	cd $WOKRING_PATH
+	if [ ! -d "$WOKRING_PATH/nebula-up" ]; then
+		git clone https://github.com/wey-gu/nebula-up.git
+	else
+		logger_warn "$WOKRING_PATH/nebula-up already exists, existing repo will be reused"
+	fi
+	cd nebula-up && git stash && git pull 1>/dev/null 2>/dev/null
+	cd spark
+	docker-compose pull || logger_error "Failed to pull docker images for spark env"
+	docker-compose up -d
+	wget -O download/nebula-spark-connector.jar https://repo1.maven.org/maven2/com/vesoft/nebula-spark-connector/$SPARK_C_VERSION/nebula-spark-connector-$SPARK_C_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Spark Connector Package"
+	wget -O download/nebula-exchange.jar https://github.com/vesoft-inc/nebula-exchange/releases/download/v$EXCHANGE_VERSION/nebula-exchange_spark_2.4-$EXCHANGE_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Exchange Package"
+	wget -O download/nebula-algo.jar https://repo1.maven.org/maven2/com/vesoft/nebula-algorithm/$ALGO_VERSION/nebula-algorithm-$ALGO_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Algorithm Package"
 }
 
 function print_footer {
@@ -456,13 +482,19 @@ function main {
 		NEBULA_VERSION="v3.1.0"
 		STUDIO_VERSION="3.2.3"
 		CONSOLE_VERSION="v3.0.0"
+		EXCHANGE_VERSION="3.0.0"
+		ALGO_VERSION="3.0.0"
+		SPARK_C_VERSION="3.0.0"
 		;;
 
 	*)
-	    logger_info "VERSION not provided"
+		logger_info "VERSION not provided"
 		NEBULA_VERSION="v3.1.0"
 		STUDIO_VERSION="3.2.3"
 		CONSOLE_VERSION="v3.0.0"
+		EXCHANGE_VERSION="3.0.0"
+		ALGO_VERSION="3.0.0"
+		SPARK_C_VERSION="3.0.0"
 		;;
 	esac
 	logger_info "Installing Nebula Graph $NEBULA_VERSION"
@@ -470,11 +502,13 @@ function main {
 	case $MODE in
 	all )
 		DASHBOARD="true"
+		SPARK="true"
 		;;
 
 	*)
-	    logger_info "Mode not provided, default to all-in-one"
+		logger_info "Mode not provided, default to all-in-one"
 		DASHBOARD="true"
+		SPARK="true"
 		;;
 	esac
 
@@ -505,6 +539,9 @@ function main {
 
 	logger_info "Installing Nebula Graph Dashboard..."
 	excute_step install_nebula_graph_dashboard
+
+	logger_info "Installing Nebula Graph Spark Connector, Exchange & Algorithm..."
+	excute_step install_nebula_graph_spark
 
 	excute_step waiting_for_nebula_graph_up
 

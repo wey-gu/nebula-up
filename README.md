@@ -28,10 +28,10 @@ Supported tools:
 - [x] Nebula Graph Studio
 - [x] Nebula Graph Console
 - [ ] Nebula BR(backup & restore)
-- [ ] Nebula Graph Spark utils
-  - [ ] Nebula Graph Spark Connector/PySpark
-  - [ ] Nebula Graph Algorithm
-  - [ ] Nebula Graph Exchange
+- [x] Nebula Graph Spark utils
+  - [x] Nebula Graph Spark Connector/PySpark
+  - [x] Nebula Graph Algorithm
+  - [x] Nebula Graph Exchange
 - [ ] Nebula Graph Importer
 - [ ] Nebula Graph Fulltext Search
 - [ ] Nebula Bench
