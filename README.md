@@ -41,6 +41,75 @@ Supported tools:
 curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash
 ```
 
+Then you could call Nebula Console like:
+```bash
+# Connect to nebula with console
+~/.nebula-up/console.sh
+# Execute queryies like
+~/.nebula-up/console.sh -e "SHOW HOSTS"
+# Load the sample dataset
+~/.nebula-up/load-basketballplayer-dataset.sh
+# Make a Graph Query the sample dataset
+~/.nebula-up/console.sh -e 'USE basketballplayer; FIND ALL PATH FROM "player100" TO "team204" OVER * WHERE follow.degree is EMPTY or follow.degree >=0 YIELD path AS p;'
+```
+
+Or play in PySpark like:
+```bash
+~/.nebula-up/nebula-pyspark.sh
+
+# call Nebula Spark Connector Reader
+df = spark.read.format(
+  "com.vesoft.nebula.connector.NebulaDataSource").option(
+    "type", "vertex").option(
+    "spaceName", "basketballplayer").option(
+    "label", "player").option(
+    "returnCols", "name,age").option(
+    "metaAddress", "metad0:9559").option(
+    "partitionNumber", 1).load()
+
+# show the dataframe with limit 2
+df.show(n=2)
+```
+
+The output may look like:
+
+```python
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /__ / .__/\_,_/_/ /_/\_\   version 2.4.5
+      /_/
+
+Using Python version 2.7.16 (default, Jan 14 2020 07:22:06)
+SparkSession available as 'spark'.
+>>> df = spark.read.format(
+...   "com.vesoft.nebula.connector.NebulaDataSource").option(
+...     "type", "vertex").option(
+...     "spaceName", "basketballplayer").option(
+...     "label", "player").option(
+...     "returnCols", "name,age").option(
+...     "metaAddress", "metad0:9559").option(
+...     "partitionNumber", 1).load()
+>>> df.show(n=2)
++---------+--------------+---+
+|_vertexId|          name|age|
++---------+--------------+---+
+|player105|   Danny Green| 31|
+|player109|Tiago Splitter| 34|
++---------+--------------+---+
+only showing top 2 rows
+```
+
+Or run an example Nebula Exchange job to import data from CSV file:
+```bash
+~/.nebula-up/nebula-exchange-example.sh
+```
+You could check the example configuration file in `~/.nebula-up/nebula-up/spark/exchange.conf`
+
+Or run a Nebula Algorithm like:
+
+TBD
+
 --------------------------------------------
 
 ~~Windows with PowerShell~~(Working In Progress):

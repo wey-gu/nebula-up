@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  spark-master:
+  master:
     networks:
       - nebula-net
     volumes:
