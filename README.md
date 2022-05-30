@@ -41,6 +41,8 @@ Supported tools:
 curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash
 ```
 
+--------------------------------------------
+
 ~~Windows with PowerShell~~(Working In Progress):
 
 ```powershell
