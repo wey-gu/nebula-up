@@ -442,13 +442,13 @@ function main {
 		CONSOLE_VERSION="v3.0.0"
 		;;
 	v2.6 | 2.6 | 2.6.3 | v2.6.3 | 2.6.* | v2.6.* )
-	    logger_info "VERSION not provided"
+		logger_info "VERSION not provided"
 		NEBULA_VERSION="v2.6"
 		STUDIO_VERSION="3.1.0"
 		CONSOLE_VERSION="v2.6.0"
 		;;
 	*)
-	    logger_info "VERSION not provided"
+		logger_info "VERSION not provided"
 		NEBULA_VERSION="v3.1.0"
 		STUDIO_VERSION="3.2.3"
 		CONSOLE_VERSION="v3.0.0"

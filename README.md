@@ -34,6 +34,7 @@ Supported tools:
   - [ ] Nebula Graph Exchange
 - [ ] Nebula Graph Importer
 - [ ] Nebula Graph Fulltext Search
+- [ ] Nebula Bench
 
 
 ```bash
