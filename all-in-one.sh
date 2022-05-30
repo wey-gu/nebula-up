@@ -401,6 +401,7 @@ function install_nebula_graph_dashboard {
 		logger_warn "$WOKRING_PATH/nebula-up already exists, existing repo will be reused"
 		fi
 	cd nebula-up && git stash && git pull 1>/dev/null 2>/dev/null
+    cd dashboard
 	docker-compose pull
 	docker-compose up -d
 
