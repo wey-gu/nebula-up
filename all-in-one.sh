@@ -281,10 +281,10 @@ function waiting_for_nebula_graph_up {
 	local max_attempts=${MAX_ATTEMPTS-6}
 	local timer=${INIT_TIMER-4}
 	local attempt=1
-
+    cd $WOKRING_PATH/nebula-docker-compose
 	while [[ $attempt < $max_attempts ]]
 	do
-		healthy_containers_count_str=$(docker ps --filter health=healthy |grep -v "CONTAINER ID"|wc -l|sed -e 's/^[[:space:]]*//')
+		healthy_containers_count_str=$(docker-compose ps --filter health=healthy | grep 'Up ('|wc -l|sed -e 's/^[[:space:]]*//')
 		if [[ "$healthy_containers_count_str" == "$expected_containers_count_str" ]]; then
 			logger_ok "all nebula-graph containers are healthy."
 			break
@@ -303,12 +303,12 @@ function waiting_for_nebula_graph_up {
 function install_nebula_graph {
 	# TBD, considerring create gitee mirror for git repo? if is_CN_NETWORK is true.
 	# https://github.com/vesoft-inc/nebula-docker-compose
-	docker network create nebula-net || true
+	docker network create nebula-net > /dev/null 2>&1 || true
 	cd $WOKRING_PATH
 	if [ ! -d "$WOKRING_PATH/nebula-docker-compose" ]; then
 		git clone --branch $NEBULA_VERSION https://github.com/vesoft-inc/nebula-docker-compose.git
         grep "external" nebula-docker-compose/docker-compose.yml > /dev/null 2>&1 || \
-            echo "    external: true" >> nebula-docker-compose/docker-compose.yml
+            echo "    external: true" >> nebula-docker-compose/docker-compose.yaml
 	else
 		logger_warn "$WOKRING_PATH/nebula-docker-compose already exists, existing repo will be reused"
 		fi
@@ -399,9 +399,9 @@ function install_nebula_graph_dashboard {
 		git clone https://github.com/wey-gu/nebula-up.git
 	else
 		logger_warn "$WOKRING_PATH/nebula-up already exists, existing repo will be reused"
-		fi
+	fi
 	cd nebula-up && git stash && git pull 1>/dev/null 2>/dev/null
-    cd dashboard
+    cd dasbhoard
 	docker-compose pull
 	docker-compose up -d
 
