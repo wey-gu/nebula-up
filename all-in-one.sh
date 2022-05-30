@@ -354,13 +354,29 @@ function install_nebula_graph_console {
 # This source code is licensed under Apache 2.0 License,
 
 
-# Usage: console.sh
+# Usage: console.sh or console.sh -e "SHOW HOSTS"
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64;
-sudo docker run --rm -ti --network nebula-docker-compose_nebula-net --entrypoint=/bin/sh vesoft/nebula-console:${CONSOLE_VERSION}
+sudo docker run --rm -ti --network nebula-net vesoft/nebula-console:${CONSOLE_VERSION} -addr graphd -port 9669 -u root -p nebula "\$@"
 EOF
 	sudo chmod +x $WOKRING_PATH/console.sh
 	logger_info "Created console.sh 😁:"
+
+	sudo bash -c "cat > $WOKRING_PATH/load-basketballplayer-dataset.sh" << EOF
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+
+
+# Usage: load-basketballplayer-dataset.sh
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64;
+sudo docker run --rm -ti --network nebula-net vesoft/nebula-console:${CONSOLE_VERSION} -addr graphd -port 9669 -u root -p nebula -e ":play basketballplayer"
+EOF
+	sudo chmod +x $WOKRING_PATH/load-basketballplayer-dataset.sh
+	logger_info "Created load-basketballplayer-dataset.sh 😁:"
+
 }
 
 # Create Uninstall Script
@@ -431,6 +447,36 @@ function install_nebula_graph_spark {
 	wget -O download/nebula-spark-connector.jar https://repo1.maven.org/maven2/com/vesoft/nebula-spark-connector/$SPARK_C_VERSION/nebula-spark-connector-$SPARK_C_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Spark Connector Package"
 	wget -O download/nebula-exchange.jar https://github.com/vesoft-inc/nebula-exchange/releases/download/v$EXCHANGE_VERSION/nebula-exchange_spark_2.4-$EXCHANGE_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Exchange Package"
 	wget -O download/nebula-algo.jar https://repo1.maven.org/maven2/com/vesoft/nebula-algorithm/$ALGO_VERSION/nebula-algorithm-$ALGO_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Algorithm Package"
+
+	sudo bash -c "cat > $WOKRING_PATH/nebula-pyspark.sh" << EOF
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+
+
+# Usage: nebula-pyspark.sh
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64;
+sudo docker exec -it spark_master_1 /spark/bin/pyspark --driver-class-path /root/download/nebula-spark-connector.jar --jars /root/download/nebula-spark-connector.jar
+EOF
+	sudo chmod +x $WOKRING_PATH/nebula-pyspark.sh
+	logger_info "Created nebula-pyspark.sh 😁:"
+
+	sudo bash -c "cat > $WOKRING_PATH/nebula-exchange-example.sh" << EOF
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+
+
+# Usage: nebula-exchange-example.sh
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64;
+sudo docker exec -it spark_master_1 /spark/bin/spark-submit --master local --class com.vesoft.nebula.exchange.Exchange /root/download/nebula-exchange.jar -c /root/exchange.conf
+EOF
+	sudo chmod +x $WOKRING_PATH/nebula-exchange-example.sh
+	logger_info "Created nebula-exchange-example.sh 😁:"
 }
 
 function print_footer {
@@ -452,7 +498,6 @@ function print_footer {
 	echo "│                                        │"
 	echo "│ 🔥 Or access via Nebula Console:       │"
 	echo "│    $ ~/.nebula-up/console.sh           │"
-	echo "│                                        │"
 	echo "│    To remove the playground:           │"
 	echo "│    $ ~/.nebula-up/uninstall.sh         │"
 	echo "│                                        │"
