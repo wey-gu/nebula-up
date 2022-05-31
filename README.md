@@ -27,7 +27,7 @@ Supported tools:
 - [x] Nebula Dashboard
 - [x] Nebula Graph Studio
 - [x] Nebula Graph Console
-- [ ] Nebula BR(backup & restore)
+- [x] Nebula BR(backup & restore)
 - [x] Nebula Graph Spark utils
   - [x] Nebula Graph Spark Connector/PySpark
   - [x] Nebula Graph Algorithm
@@ -36,11 +36,25 @@ Supported tools:
 - [ ] Nebula Graph Fulltext Search
 - [ ] Nebula Bench
 
-
+### Install all in one
 ```bash
+# Install Nebula Core with all-in-one mode
 curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash
 ```
 
+### Install Nebula Core and One of the coponent:
+```bash
+# Install Core with Backup and Restore with MinIO
+curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash -s -- v3 br
+# Install Core with Spark Connector, Nebula Algorithm, Nebula Exchange
+curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash -s -- v3 spark
+# Install Core with Dashboard
+curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash -s -- v3 dashboard
+```
+
+### How to play with all-in-one mode:
+
+#### Console and Basketballplayer Dataset Loading
 Then you could call Nebula Console like:
 ```bash
 # Connect to nebula with console
@@ -52,6 +66,11 @@ Then you could call Nebula Console like:
 # Make a Graph Query the sample dataset
 ~/.nebula-up/console.sh -e 'USE basketballplayer; FIND ALL PATH FROM "player100" TO "team204" OVER * WHERE follow.degree is EMPTY or follow.degree >=0 YIELD path AS p;'
 ```
+#### Monitor the whole cluster with Nebula Dashboard
+
+Visit http://127.0.0.1:7003 with user: `root`, password: `nebula`.
+
+#### Query Data with Nebula Spark Connector in PySpark Shell
 
 Or play in PySpark like:
 ```bash
@@ -100,15 +119,32 @@ SparkSession available as 'spark'.
 only showing top 2 rows
 ```
 
+#### Run Nebula Exchange
+
 Or run an example Nebula Exchange job to import data from CSV file:
 ```bash
 ~/.nebula-up/nebula-exchange-example.sh
 ```
 You could check the example configuration file in `~/.nebula-up/nebula-up/spark/exchange.conf`
 
+#### Run Nebula Graph Algorithm
+
 Or run a Nebula Algorithm like:
 
 TBD
+
+#### Try Backup and Restore with MinIO as Storage
+
+```bash
+# Create a full backup to MinIO(Be sure to run load-basketballplayer-dataset.sh before doing so)
+~/.nebula-up/nebula-br-backup-full.sh
+# Show all backups
+~/.nebula-up/nebula-br-show.sh
+# Restore to a backup named BACKUP_2022_05_08_11_38_08
+~/.nebula-up/nebula-br-restore-full.sh BACKUP_2022_05_08_11_38_08
+```
+
+Note, you could also browser files in MinIO with from http://127.0.0.1:19000 with user: `minioadmin`, password: `minioadmin`.
 
 --------------------------------------------
 

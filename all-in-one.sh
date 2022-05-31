@@ -392,11 +392,11 @@ function create_uninstall_script {
 # Usage: uninstall.sh
 
 echo " ℹ️   Cleaning Up Files under $WOKRING_PATH..."
-cd $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION 2>/dev/null && sudo docker-compose down 2>/dev/null
-cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null && sudo docker-compose down 2>/dev/null
-cd $WOKRING_PATH/nebula-up/dashboard 2>/dev/null && sudo docker-compose down 2>/dev/null
-cd $WOKRING_PATH/nebula-up/spark 2>/dev/null && sudo docker-compose down 2>/dev/null
-cd $WOKRING_PATH/nebula-up/backup_restore 2>/dev/null && sudo docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION 2>/dev/null && docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null && docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-up/dashboard 2>/dev/null && docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-up/spark 2>/dev/null && docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-up/backup_restore 2>/dev/null && docker-compose down 2>/dev/null
 sudo docker volume rm br_data1-1 br_data1-2 br_data2-1 br_data2-2 2>/dev/null
 sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION $WOKRING_PATH/nebula-docker-compose $WOKRING_PATH/nebula-up 2>/dev/null
 echo "┌────────────────────────────────────────┐"
@@ -506,15 +506,31 @@ function install_nebula_graph_br {
 # This source code is licensed under Apache 2.0 License,
 
 
-# Usage: nebula-br.sh --help
+# Usage: nebula-br.sh --help or nebula-br.sh show --help
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64;
-sudo docker exec -it br_graphd1-agent_1 br "\$@"
+sudo docker exec -it backup_restore_graphd1-agent_1 br "\$@"
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-br.sh
 	logger_info "Created nebula-br.sh 😁:"
 
 
+	sudo bash -c "cat > $WOKRING_PATH/nebula-br-backup-full.sh" << EOF
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+
+
+# Usage: nebula-br-backup-full.sh
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64;
+sudo docker exec -it backup_restore_graphd1-agent_1 br backup full --meta "metad0:9559" --s3.endpoint "http://nginx:9000" --storage="s3://nebula-br-bucket/" --s3.access_key=minioadmin --s3.secret_key=minioadmin --s3.region=default
+EOF
+	sudo chmod +x $WOKRING_PATH/nebula-br-backup-full.sh
+	logger_info "Created nebula-br-backup-full.sh 😁:"
+
+
 	sudo bash -c "cat > $WOKRING_PATH/nebula-br-show.sh" << EOF
 #!/usr/bin/env bash
 # Copyright (c) 2021 vesoft inc. All rights reserved.
@@ -525,26 +541,26 @@ EOF
 # Usage: nebula-br-show.sh
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64;
-sudo docker exec -it br_graphd1-agent_1 br backup full --meta "metad0:9559" --s3.endpoint "http://nginx:9000" --storage="s3://nebula-br-bucket/" --s3.access_key=minioadmin --s3.secret_key=minioadmin --s3.region=default
+sudo docker exec -it backup_restore_graphd1-agent_1 br show --s3.endpoint "http://nginx:9000" --storage="s3://nebula-br-bucket/" --s3.access_key=minioadmin --s3.secret_key=minioadmin --s3.region=default
 EOF
-	sudo chmod +x $WOKRING_PATH/nebula-br-show.sh.sh
+	sudo chmod +x $WOKRING_PATH/nebula-br-show.sh
 	logger_info "Created nebula-br-show.sh 😁:"
 
-
-	sudo bash -c "cat > $WOKRING_PATH/nebula-br-show.sh" << EOF
+	sudo bash -c "cat > $WOKRING_PATH/nebula-br-restore-full.sh" << EOF
 #!/usr/bin/env bash
 # Copyright (c) 2021 vesoft inc. All rights reserved.
 #
 # This source code is licensed under Apache 2.0 License,
 
 
-# Usage: nebula-br-show.sh
+# Usage: nebula-br-restore-full.sh
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64;
-sudo docker exec -it br_graphd1-agent_1 br show --s3.endpoint "http://nginx:9000" --storage="s3://nebula-br-bucket/" --s3.access_key=minioadmin --s3.secret_key=minioadmin --s3.region=default
+sudo docker exec -it backup_restore_graphd1-agent_1 br restore full --meta "metad0:9559" --s3.endpoint "http://nginx:9000" --storage="s3://nebula-br-bucket/" --s3.access_key=minioadmin --s3.secret_key=minioadmin --s3.region=default --name "\$@"
 EOF
-	sudo chmod +x $WOKRING_PATH/nebula-br-show.sh.sh
-	logger_info "Created nebula-br-show.sh 😁:"
+	sudo chmod +x $WOKRING_PATH/nebula-br-restore-full.sh
+	logger_info "Created nebula-br-restore-full.sh 😁:"
+
 }
 
 
