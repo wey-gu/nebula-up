@@ -1,0 +1,125 @@
+version: '3.7'
+# Copied from https://docs.min.io/docs/deploy-minio-on-docker-compose.html
+# Settings and configurations that are common for all containers
+x-minio-common: &minio-common
+  image: quay.io/minio/minio:RELEASE.2022-05-26T05-48-41Z
+  command: server --console-address ":9001" http://minio{1...2}/data{1...2}
+  expose:
+    - "9000"
+    - "9001"
+  # environment:
+    # MINIO_ROOT_USER: minioadmin
+    # MINIO_ROOT_PASSWORD: minioadmin
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+    interval: 30s
+    timeout: 20s
+    retries: 3
+
+# starts 1 docker containers running minio server instances.
+# using nginx reverse proxy, load balancing, you can access
+# it through port 9000.
+services:
+  minio1:
+    <<: *minio-common
+    hostname: minio1
+    volumes:
+      - data1-1:/data1
+      - data1-2:/data2
+    networks:
+      - nebula-net
+  minio2:
+    <<: *minio-common
+    hostname: minio2
+    volumes:
+      - data2-1:/data1
+      - data2-2:/data2
+    networks:
+      - nebula-net
+
+  nginx:
+    image: nginx:1.19.2-alpine
+    hostname: nginx
+    volumes:
+      - ${PWD}/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "19000:9000"
+      - "9001:9001"
+    depends_on:
+      - minio1
+      - minio2
+    networks:
+      - nebula-net
+
+  metad0-agent:
+    image: weygu/nebula-br:$BR_VERSION
+    command: --agent="metad0:8888" --meta="metad0:9559"
+    network_mode: 'container:nebula-docker-compose_metad0_1'
+
+  metad1-agent:
+    image: weygu/nebula-br:$BR_VERSION
+    command: --agent="metad1:8888" --meta="metad0:9559"
+    network_mode: 'container:nebula-docker-compose_metad1_1'
+
+  metad2-agent:
+    image: weygu/nebula-br:$BR_VERSION
+    command: --agent="metad2:8888" --meta="metad0:9559"
+    network_mode: 'container:nebula-docker-compose_metad2_1'
+
+  storaged0-agent:
+    image: weygu/nebula-br:$BR_VERSION
+    command: --agent="storaged0:8888" --meta="metad0:9559"
+    network_mode: 'container:nebula-docker-compose_storaged0_1'
+
+  storaged1-agent:
+    image: weygu/nebula-br:$BR_VERSION
+    command: --agent="storaged1:8888" --meta="metad0:9559"
+    network_mode: 'container:nebula-docker-compose_storaged1_1'
+
+  storaged2-agent:
+    image: weygu/nebula-br:$BR_VERSION
+    command: --agent="storaged2:8888" --meta="metad0:9559"
+    network_mode: 'container:nebula-docker-compose_storaged2_1'
+
+  graphd-agent:
+    image: weygu/nebula-br:$BR_VERSION
+    command: --agent="graphd:8888" --meta="metad0:9559"
+    network_mode: 'container:nebula-docker-compose_graphd_1'
+
+  graphd1-agent:
+    image: weygu/nebula-br:$BR_VERSION
+    command: --agent="graphd1:8888" --meta="metad0:9559"
+    network_mode: 'container:nebula-docker-compose_graphd1_1'
+
+  graphd2-agent:
+    image: weygu/nebula-br:$BR_VERSION
+    command: --agent="graphd2:8888" --meta="metad0:9559"
+    network_mode: 'container:nebula-docker-compose_graphd2_1'
+
+  minio-client:
+    image: quay.io/minio/mc:RELEASE.2022-05-09T04-08-26Z
+    entrypoint: ""
+    command: 
+      - sh
+      - -c
+      - |
+        sleep 10 &&
+        mc alias set my_object_storage http://nginx:9000 minioadmin minioadmin &&
+        mc mb my_object_storage/nebula-br-bucket &&
+        sleep 36000
+    depends_on:
+      - nginx
+    networks:
+      - nebula-net
+
+## By default this config uses default local driver,
+## For custom volumes replace with volume driver configuration.
+volumes:
+  data1-1:
+  data1-2:
+  data2-1:
+  data2-2:
+
+networks:
+  nebula-net:
+    external: true

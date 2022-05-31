@@ -357,7 +357,7 @@ function install_nebula_graph_console {
 # Usage: console.sh or console.sh -e "SHOW HOSTS"
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64;
-sudo docker run --rm -ti --network nebula-net vesoft/nebula-console:${CONSOLE_VERSION} -addr graphd -port 9669 -u root -p nebula "\$@"
+sudo docker run --rm -ti --network nebula-net --volume $WOKRING_PATH:/root vesoft/nebula-console:${CONSOLE_VERSION} -addr graphd -port 9669 -u root -p nebula "\$@"
 EOF
 	sudo chmod +x $WOKRING_PATH/console.sh
 	logger_info "Created console.sh 😁:"
@@ -394,10 +394,11 @@ function create_uninstall_script {
 echo " ℹ️   Cleaning Up Files under $WOKRING_PATH..."
 cd $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION 2>/dev/null && sudo docker-compose down 2>/dev/null
 cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null && sudo docker-compose down 2>/dev/null
-cd $WOKRING_PATH/dashboard 2>/dev/null && sudo docker-compose down 2>/dev/null
-cd $WOKRING_PATH/spark 2>/dev/null && sudo docker-compose down 2>/dev/null
-
-sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION $WOKRING_PATH/nebula-docker-compose 2>/dev/null
+cd $WOKRING_PATH/nebula-up/dashboard 2>/dev/null && sudo docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-up/spark 2>/dev/null && sudo docker-compose down 2>/dev/null
+cd $WOKRING_PATH/nebula-up/backup_restore 2>/dev/null && sudo docker-compose down 2>/dev/null
+sudo docker volume rm br_data1-1 br_data1-2 br_data2-1 br_data2-2 2>/dev/null
+sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION $WOKRING_PATH/nebula-docker-compose $WOKRING_PATH/nebula-up 2>/dev/null
 echo "┌────────────────────────────────────────┐"
 echo "│ 🌌 Nebula-Up Uninstallation Finished   │"
 echo "└────────────────────────────────────────┘"
@@ -479,6 +480,75 @@ EOF
 	logger_info "Created nebula-exchange-example.sh 😁:"
 }
 
+function install_nebula_graph_br {
+	# if BR is not true, then skip, else continue to install.
+	if [ "$BR" != "true" ]; then
+		logger_info "Skip BR env installation in current mode: $MODE"
+		return
+	fi
+	# if BR is true, then continue to install.
+	logger_info "Installing Nebula BR env: MINIO, Nebula Agents, BR"
+	cd $WOKRING_PATH
+	if [ ! -d "$WOKRING_PATH/nebula-up" ]; then
+		git clone https://github.com/wey-gu/nebula-up.git
+	else
+		logger_warn "$WOKRING_PATH/nebula-up already exists, existing repo will be reused"
+	fi
+	cd nebula-up && git stash && git pull 1>/dev/null 2>/dev/null
+	cd backup_restore
+	docker-compose pull || logger_error "Failed to pull docker images for backup_restore env"
+	docker-compose up -d
+
+	sudo bash -c "cat > $WOKRING_PATH/nebula-br.sh" << EOF
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+
+
+# Usage: nebula-br.sh --help
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64;
+sudo docker exec -it br_graphd1-agent_1 br "\$@"
+EOF
+	sudo chmod +x $WOKRING_PATH/nebula-br.sh
+	logger_info "Created nebula-br.sh 😁:"
+
+
+	sudo bash -c "cat > $WOKRING_PATH/nebula-br-show.sh" << EOF
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+
+
+# Usage: nebula-br-show.sh
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64;
+sudo docker exec -it br_graphd1-agent_1 br backup full --meta "metad0:9559" --s3.endpoint "http://nginx:9000" --storage="s3://nebula-br-bucket/" --s3.access_key=minioadmin --s3.secret_key=minioadmin --s3.region=default
+EOF
+	sudo chmod +x $WOKRING_PATH/nebula-br-show.sh.sh
+	logger_info "Created nebula-br-show.sh 😁:"
+
+
+	sudo bash -c "cat > $WOKRING_PATH/nebula-br-show.sh" << EOF
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+
+
+# Usage: nebula-br-show.sh
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64;
+sudo docker exec -it br_graphd1-agent_1 br show --s3.endpoint "http://nginx:9000" --storage="s3://nebula-br-bucket/" --s3.access_key=minioadmin --s3.secret_key=minioadmin --s3.region=default
+EOF
+	sudo chmod +x $WOKRING_PATH/nebula-br-show.sh.sh
+	logger_info "Created nebula-br-show.sh 😁:"
+}
+
+
+
 function print_footer {
 
 	echo "┌────────────────────────────────────────┐"
@@ -548,12 +618,28 @@ function main {
 	all )
 		DASHBOARD="true"
 		SPARK="true"
+		BR="true"
 		;;
-
+	spark )
+		DASHBOARD="false"
+		SPARK="true"
+		BR="false"
+		;;
+	dashboard )
+		DASHBOARD="true"
+		SPARK="false"
+		BR="false"
+		;;
+	br )
+		DASHBOARD="false"
+		SPARK="false"
+		BR="true"
+		;;
 	*)
 		logger_info "Mode not provided, default to all-in-one"
 		DASHBOARD="true"
 		SPARK="true"
+		BR="true"
 		;;
 	esac
 
@@ -587,6 +673,9 @@ function main {
 
 	logger_info "Installing Nebula Graph Spark Connector, Exchange & Algorithm..."
 	excute_step install_nebula_graph_spark
+
+	logger_info "Installing Nebula Graph Backup and Restore..."
+	excute_step install_nebula_graph_br
 
 	excute_step waiting_for_nebula_graph_up
 
