@@ -70,6 +70,13 @@ Then you could call Nebula Console like:
 
 Visit http://127.0.0.1:7003 with user: `root`, password: `nebula`.
 
+> Note, thanks to the sponsorship of Microsoft, we have a demo site of Nebula-UP on Azure: you could visit the dashboard here: http://nebula-demo.siwei.io:7003 .
+#### Access Nebula Graph Studio
+
+Visit http://127.0.0.1:7001 with user: `root`, password: `nebula`, host: `graphd:9669`(for non-all-in-one case, this should be `<host-ip>:9669`).
+
+> Note, thanks to the sponsorship of Microsoft, we have a demo site of Nebula-UP on Azure: you could visit the studio here: http://nebula-demo.siwei.io:7001 .
+
 #### Query Data with Nebula Spark Connector in PySpark Shell
 
 Or play in PySpark like:
@@ -144,7 +151,9 @@ TBD
 ~/.nebula-up/nebula-br-restore-full.sh BACKUP_2022_05_08_11_38_08
 ```
 
-Note, you could also browser files in MinIO with from http://127.0.0.1:19000 with user: `minioadmin`, password: `minioadmin`.
+Note, you could also browser files in MinIO with from http://127.0.0.1:9001 with user: `minioadmin`, password: `minioadmin`.
+
+> Note, thanks to the sponsorship of Microsoft, we have a demo site of Nebula-UP on Azure: you could visit the MinIO site here: http://nebula-demo.siwei.io:9001 .
 
 --------------------------------------------
 
