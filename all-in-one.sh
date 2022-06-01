@@ -397,8 +397,6 @@ function create_uninstall_script {
 echo " ℹ️   Cleaning Up Files under $WOKRING_PATH..."
 cd $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION 2>/dev/null
 docker-compose down 2>/dev/null
-cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null
-docker-compose down 2>/dev/null
 cd $WOKRING_PATH/nebula-up/dashboard 2>/dev/null
 docker-compose down 2>/dev/null
 cd $WOKRING_PATH/nebula-up/spark 2>/dev/null
@@ -407,6 +405,8 @@ cd $WOKRING_PATH/nebula-up/backup_restore 2>/dev/null
 docker-compose down 2>/dev/null
 sudo docker volume rm backup_restore_data1-1 backup_restore_data1-2 backup_restore_data2-1 backup_restore_data2-2 2>/dev/null
 sudo docker volume rm spark_hadoop_datanode spark_hadoop_historyserver spark_hadoop_namenode 2>/dev/null
+cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null
+docker-compose down 2>/dev/null
 
 sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION $WOKRING_PATH/nebula-docker-compose $WOKRING_PATH/nebula-up 2>/dev/null
 echo "┌────────────────────────────────────────┐"
