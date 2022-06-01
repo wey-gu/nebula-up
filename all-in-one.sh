@@ -430,7 +430,7 @@ function install_nebula_graph_dashboard {
 	else
 		logger_warn "$WOKRING_PATH/nebula-up already exists, existing repo will be reused"
 	fi
-	cd nebula-up && git stash && git pull 1>/dev/null 2>/dev/null
+	cd nebula-up && git stash 1>/dev/null 2>/dev/null && git pull 1>/dev/null 2>/dev/null
 	cd dashboard
 	docker-compose pull
 	docker-compose up -d
@@ -451,7 +451,7 @@ function install_nebula_graph_spark {
 	else
 		logger_warn "$WOKRING_PATH/nebula-up already exists, existing repo will be reused"
 	fi
-	cd nebula-up && git stash && git pull 1>/dev/null 2>/dev/null
+	cd nebula-up && git stash 1>/dev/null 2>/dev/null && git pull 1>/dev/null 2>/dev/null
 	cd spark
 	docker-compose pull || logger_error "Failed to pull docker images for spark env"
 	docker-compose up -d
@@ -504,7 +504,7 @@ function install_nebula_graph_br {
 	else
 		logger_warn "$WOKRING_PATH/nebula-up already exists, existing repo will be reused"
 	fi
-	cd nebula-up && git stash && git pull 1>/dev/null 2>/dev/null
+	cd nebula-up && git stash 1>/dev/null 2>/dev/null && git pull 1>/dev/null 2>/dev/null
 	cd backup_restore
 	docker-compose pull || logger_error "Failed to pull docker images for backup_restore env"
 	docker-compose up -d
