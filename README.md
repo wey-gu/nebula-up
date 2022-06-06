@@ -140,9 +140,21 @@ You could check the example configuration file in `~/.nebula-up/nebula-up/spark/
 
 #### Run Nebula Graph Algorithm
 
-Or run a Nebula Algorithm like:
+> Reference: https://github.com/wey-gu/nebula-livejournal
 
-TBD
+Load LiveJournal dataset with Nebula Importer:
+
+```bash
+~/.nebula-up/load-LiveJournal-dataset.sh
+```
+
+Run Nebula Algorithm like:
+
+```bash
+~/.nebula-up/nebula-algo-pagerank-example.sh
+```
+
+
 
 #### Try Backup and Restore with MinIO as Storage
 
