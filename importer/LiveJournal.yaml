@@ -1,0 +1,85 @@
+---
+# https://github.com/wey-gu/nebula-livejournal/blob/main/nebula-importer/importer.yaml
+version: v2
+description: nebula-livejournal importer config file
+removeTempFiles: false
+clientSettings:
+  retry: 6
+  concurrency: 1 # number of graph clients
+  channelBufferSize: 16
+  space: livejournal
+  connection:
+    user: root
+    password: nebula
+    address: graphd:9669 # change to your nebula graph's graphd address
+  postStart:
+    commands: |
+      DROP SPACE IF EXISTS livejournal;
+      CREATE SPACE IF NOT EXISTS livejournal(partition_num=9, replica_factor=1, vid_type=int);
+      USE livejournal;
+      CREATE TAG user();
+      CREATE EDGE follow();
+    afterPeriod: 12s
+  preStop:
+    commands: |
+      SUBMIT JOB STATS;
+logPath: ./err/importer.log
+files:
+  - path: ./soc-LiveJournal1.txt
+    failDataPath: ./err/userColumn0
+    batchSize: 128
+    inOrder: true
+    type: csv
+    csv:
+      withHeader: false
+      withLabel: false
+      delimiter: "\t"
+    schema:
+      type: vertex
+      vertex:
+        vid:
+          index: 0
+          type: int
+        tags:
+          - name: user
+            props: []
+
+  - path: ./soc-LiveJournal1.txt
+    failDataPath: ./err/userColumn1
+    batchSize: 128
+    inOrder: true
+    type: csv
+    csv:
+      withHeader: false
+      withLabel: false
+      delimiter: "\t"
+    schema:
+      type: vertex
+      vertex:
+        vid:
+          index: 1
+          type: int
+        tags:
+          - name: user
+            props: []
+
+  - path: ./soc-LiveJournal1.txt
+    failDataPath: ./err/follow
+    batchSize: 64
+    inOrder: true
+    type: csv
+    csv:
+      withHeader: false
+      withLabel: false
+      delimiter: "\t"
+    schema:
+      type: edge
+      edge:
+        name: follow
+        withRanking: false
+        srcVID:
+          index: 0
+          type: int
+        dstVID:
+          index: 1
+          type: int

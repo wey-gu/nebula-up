@@ -363,7 +363,7 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64;
 sudo docker run --rm -ti --network nebula-net --volume $WOKRING_PATH:/root vesoft/nebula-console:${CONSOLE_VERSION} -addr graphd -port 9669 -u root -p nebula "\$@"
 EOF
 	sudo chmod +x $WOKRING_PATH/console.sh
-	logger_info "Created console.sh 😁:"
+	logger_info "Created console.sh 😁"
 
 	sudo bash -c "cat > $WOKRING_PATH/load-basketballplayer-dataset.sh" << EOF
 #!/usr/bin/env bash
@@ -378,7 +378,7 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64;
 sudo docker run --rm -ti --network nebula-net vesoft/nebula-console:${CONSOLE_VERSION} -addr graphd -port 9669 -u root -p nebula -e ":play basketballplayer"
 EOF
 	sudo chmod +x $WOKRING_PATH/load-basketballplayer-dataset.sh
-	logger_info "Created load-basketballplayer-dataset.sh 😁:"
+	logger_info "Created load-basketballplayer-dataset.sh 😁"
 
 }
 
@@ -458,7 +458,12 @@ function install_nebula_graph_spark {
 	wget -O download/nebula-spark-connector.jar https://repo1.maven.org/maven2/com/vesoft/nebula-spark-connector/$SPARK_C_VERSION/nebula-spark-connector-$SPARK_C_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Spark Connector Package"
 	wget -O download/nebula-exchange.jar https://github.com/vesoft-inc/nebula-exchange/releases/download/v$EXCHANGE_VERSION/nebula-exchange_spark_2.4-$EXCHANGE_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Exchange Package"
 	wget -O download/nebula-algo.jar https://repo1.maven.org/maven2/com/vesoft/nebula-algorithm/$ALGO_VERSION/nebula-algorithm-$ALGO_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Algorithm Package"
-
+	if [ "$ALGO" == "true" ]; then
+		logger_info "Downloading soc-LiveJournal1 dataset..."
+		wget -O download/soc-LiveJournal1.txt.gz https://snap.stanford.edu/data/soc-LiveJournal1.txt.gz
+		gzip -d download/soc-LiveJournal1.txt.gz
+		sed -i '1,4d' download/soc-LiveJournal1.txt
+	fi
 	sudo bash -c "cat > $WOKRING_PATH/nebula-pyspark.sh" << EOF
 #!/usr/bin/env bash
 # Copyright (c) 2021 vesoft inc. All rights reserved.
@@ -472,7 +477,7 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64;
 sudo docker exec -it spark_master_1 /spark/bin/pyspark --driver-class-path /root/download/nebula-spark-connector.jar --jars /root/download/nebula-spark-connector.jar
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-pyspark.sh
-	logger_info "Created nebula-pyspark.sh 😁:"
+	logger_info "Created nebula-pyspark.sh 😁"
 
 	sudo bash -c "cat > $WOKRING_PATH/nebula-exchange-example.sh" << EOF
 #!/usr/bin/env bash
@@ -487,7 +492,46 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64;
 sudo docker exec -it spark_master_1 /spark/bin/spark-submit --master local --class com.vesoft.nebula.exchange.Exchange /root/download/nebula-exchange.jar -c /root/exchange.conf
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-exchange-example.sh
-	logger_info "Created nebula-exchange-example.sh 😁:"
+	logger_info "Created nebula-exchange-example.sh 😁"
+
+	sudo bash -c "cat > $WOKRING_PATH/load-LiveJournal-dataset.sh" << EOF
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+
+
+# Usage: load-LiveJournal-dataset.sh
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64;
+sudo docker run --rm -ti \\
+    --network=nebula-net \\
+    -v $WOKRING_PATH/nebula-up/importer/LiveJournal.yaml:/root/importer.yaml \\
+    -v $WOKRING_PATH/nebula-up/spark/download:/root \\
+    vesoft/nebula-importer:v3.1.0 \\
+    --config /root/importer.yaml
+
+EOF
+	sudo chmod +x $WOKRING_PATH/load-LiveJournal-dataset.sh
+	logger_info "Created load-LiveJournal-dataset.sh 😁"
+
+	sudo bash -c "cat > $WOKRING_PATH/nebula-algo-pagerank-example.sh" << EOF
+#!/usr/bin/env bash
+# Copyright (c) 2021 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+
+
+# Usage: nebula-algo-pagerank-example.sh
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64;
+sudo docker exec -it spark_master_1 /spark/bin/spark-submit --master "local" --conf spark.rpc.askTimeout=6000s \\
+    --class com.vesoft.nebula.algorithm.Main \\
+    --driver-memory 4g /root/download/nebula-algo.jar \\
+    -p /root/pagerank.conf
+EOF
+	sudo chmod +x $WOKRING_PATH/nebula-algo-pagerank-example.sh
+	logger_info "Created nebula-algo-pagerank-example.sh 😁"
 }
 
 function install_nebula_graph_br {
@@ -522,7 +566,7 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64;
 sudo docker exec -it backup_restore_graphd1-agent_1 br "\$@"
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-br.sh
-	logger_info "Created nebula-br.sh 😁:"
+	logger_info "Created nebula-br.sh 😁"
 
 
 	sudo bash -c "cat > $WOKRING_PATH/nebula-br-backup-full.sh" << EOF
@@ -538,7 +582,7 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64;
 sudo docker exec -it backup_restore_graphd1-agent_1 br backup full --meta "metad0:9559" --s3.endpoint "http://nginx:9000" --storage="s3://nebula-br-bucket/" --s3.access_key=minioadmin --s3.secret_key=minioadmin --s3.region=default
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-br-backup-full.sh
-	logger_info "Created nebula-br-backup-full.sh 😁:"
+	logger_info "Created nebula-br-backup-full.sh 😁"
 
 
 	sudo bash -c "cat > $WOKRING_PATH/nebula-br-show.sh" << EOF
@@ -554,7 +598,7 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64;
 sudo docker exec -it backup_restore_graphd1-agent_1 br show --s3.endpoint "http://nginx:9000" --storage="s3://nebula-br-bucket/" --s3.access_key=minioadmin --s3.secret_key=minioadmin --s3.region=default
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-br-show.sh
-	logger_info "Created nebula-br-show.sh 😁:"
+	logger_info "Created nebula-br-show.sh 😁"
 
 	sudo bash -c "cat > $WOKRING_PATH/nebula-br-restore-full.sh" << EOF
 #!/usr/bin/env bash
@@ -569,7 +613,7 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64;
 sudo docker exec -it backup_restore_graphd1-agent_1 br restore full --meta "metad0:9559" --s3.endpoint "http://nginx:9000" --storage="s3://nebula-br-bucket/" --s3.access_key=minioadmin --s3.secret_key=minioadmin --s3.region=default --name "\$@"
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-br-restore-full.sh
-	logger_info "Created nebula-br-restore-full.sh 😁:"
+	logger_info "Created nebula-br-restore-full.sh 😁"
 
 }
 
@@ -645,26 +689,37 @@ function main {
 		DASHBOARD="true"
 		SPARK="true"
 		BR="true"
+		ALGO="true"
 		;;
 	spark )
 		DASHBOARD="false"
 		SPARK="true"
+		ALGO="true"
+		BR="false"
+		;;
+	algo )
+		DASHBOARD="false"
+		SPARK="true"
+		ALGO="true"
 		BR="false"
 		;;
 	dashboard )
 		DASHBOARD="true"
 		SPARK="false"
+		ALGO="false"
 		BR="false"
 		;;
 	br )
 		DASHBOARD="false"
 		SPARK="false"
+		ALGO="false"
 		BR="true"
 		;;
 	*)
 		logger_info "Mode not provided, default to all-in-one"
 		DASHBOARD="true"
 		SPARK="true"
+		ALGO="true"
 		BR="true"
 		;;
 	esac
