@@ -1,6 +1,6 @@
 # Nebula-Up
 
-> Update: the All-in-one mode is introduced! Check [here](#All-in-one mode) and try it!
+> Update: the All-in-one mode is introduced! Check [here](#all-in-one-mode) and try it!
 
 [![nebula-up demo](./images/nebula-up-demo.svg)](https://asciinema.org/a/407151 "Nebula Up Demo")
 
