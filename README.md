@@ -27,18 +27,22 @@ With all-in-one mode, you could play with many Nebula Tools in one command, too:
 
 ![](./images/nebula-up-all-in-one.svg)
 
-Supported tools:
+Roadmap:
 - [x] Nebula Dashboard
 - [x] Nebula Graph Studio
 - [x] Nebula Graph Console
 - [x] Nebula BR(backup & restore)
 - [x] Nebula Graph Spark utils
-  - [x] Nebula Graph Spark Connector/PySpark
+  - [x] Nebula Graph Spark Connector/PySpark REPL
   - [x] Nebula Graph Algorithm
   - [x] Nebula Graph Exchange
-- [ ] Nebula Graph Importer
+- [x] Nebula Graph Importer
 - [ ] Nebula Graph Fulltext Search
 - [ ] Nebula Bench
+- [ ] Nebula Client REPL
+  - [ ] Try Python SDK in iPython
+  - [ ] Try Java SDK in REPL
+- [ ] Nebula Build, Debug and Dev Env
 
 ### Install all in one
 ```bash
