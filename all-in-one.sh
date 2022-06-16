@@ -162,7 +162,7 @@ function install_docker {
 
 function install_docker_compose {
 	# Only Linux is needed, for macOS, Docker Desktop comes with compose out of box
-	COMPOSE_VERSION="1.29.0"
+	COMPOSE_VERSION="v2.6.0"
 	logger_info "Starting Instlation of Docker-Compose"
 	sudo curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 	sudo chmod +x /usr/local/bin/docker-compose
