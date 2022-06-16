@@ -56,6 +56,7 @@ function get_platform {
 		"Darwin x86_64") platform="x86_64-darwin" ;;
 		"Darwin arm64")  platform="aarch64-darwin" ;;
 		"Linux x86_64")  platform="x86_64-linux" ;;
+		"Linux aarch64") platform="aarch64-linux" ;;
 		*)               platform="unknown-platform" ;;
 	esac
 	echo $platform
