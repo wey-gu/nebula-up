@@ -99,7 +99,7 @@ function cat_get_google_com {
 function is_CN_NETWORK {
 	case $PLATFORM in
 		"x86_64-darwin"|"aarch64-darwin") internet_result=$(nc_get_google_com) ;;
-		"x86_64-linux") internet_result=$(cat_get_google_com) ;;
+		"x86_64-linux"|"aarch64-linux") internet_result=$(cat_get_google_com) ;;
 	esac
 	if [ $internet_result == "OK" ]; then
 		false
