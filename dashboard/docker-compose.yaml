@@ -22,7 +22,7 @@ services:
     ports:
       - 9200:9200
     volumes:
-      - ${PWD}/nebula-stats-exporter.yaml:/config.yaml
+      - ./nebula-stats-exporter.yaml:/config.yaml
     networks:
       - nebula-net
 
@@ -30,7 +30,7 @@ services:
     image: prom/prometheus:v2.1.0
     user: root
     volumes:
-      - ${PWD}/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
       - ./data/prometheus:/prometheus:rw
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -48,7 +48,7 @@ services:
   nebula-http-gateway:
     image: vesoft/nebula-http-gateway:v2.2.0
     volumes:
-      - ${PWD}/nebula-http-gateway.conf:/root/conf/app.conf
+      - ./nebula-http-gateway.conf:/root/conf/app.conf
     environment:
       USER: root
     ports:
@@ -63,7 +63,7 @@ services:
     ports:
       - 7003:7003
     volumes:
-      - ${PWD}/dashboard.config:/app/config.json
+      - ./dashboard.config:/app/config.json
     environment:
       USER: root
     networks:
