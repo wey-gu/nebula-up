@@ -217,6 +217,7 @@ function configure_docker_cn_mirror {
         *inux*)  DOCKER_CONF_PATH="/etc/docker" ;;
         *arwin*) DOCKER_CONF_PATH="$HOME/.docker" ;;
     esac
+    sudo mkdir -p ${DOCKER_CONF_PATH}
     sudo bash -c "cat > ${DOCKER_CONF_PATH}/daemon.json" << EOF
 {
   "registry-mirrors": [
