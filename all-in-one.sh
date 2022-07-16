@@ -476,7 +476,7 @@ function install_nebula_graph_spark {
 # Usage: nebula-pyspark.sh
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64;
-sudo docker exec -it spark_master_1 /spark/bin/pyspark --driver-class-path /root/download/nebula-spark-connector.jar --jars /root/download/nebula-spark-connector.jar
+sudo docker exec -it sparkmaster /spark/bin/pyspark --driver-class-path /root/download/nebula-spark-connector.jar --jars /root/download/nebula-spark-connector.jar
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-pyspark.sh
 	logger_info "Created nebula-pyspark.sh 😁"
@@ -491,7 +491,7 @@ EOF
 # Usage: nebula-exchange-example.sh
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64;
-sudo docker exec -it spark_master_1 /spark/bin/spark-submit --master local --class com.vesoft.nebula.exchange.Exchange /root/download/nebula-exchange.jar -c /root/exchange.conf
+sudo docker exec -it sparkmaster /spark/bin/spark-submit --master local --class com.vesoft.nebula.exchange.Exchange /root/download/nebula-exchange.jar -c /root/exchange.conf
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-exchange-example.sh
 	logger_info "Created nebula-exchange-example.sh 😁"
@@ -527,7 +527,7 @@ EOF
 # Usage: nebula-algo-pagerank-example.sh
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64;
-sudo docker exec -it spark_master_1 /spark/bin/spark-submit --master "local" --conf spark.rpc.askTimeout=6000s \\
+sudo docker exec -it sparkmaster /spark/bin/spark-submit --master "local" --conf spark.rpc.askTimeout=6000s \\
     --class com.vesoft.nebula.algorithm.Main \\
     --driver-memory 4g /root/download/nebula-algo.jar \\
     -p /root/pagerank.conf
