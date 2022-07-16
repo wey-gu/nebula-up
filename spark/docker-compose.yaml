@@ -7,6 +7,7 @@ services:
     volumes:
       - '${PWD}/:/root'
     image: 'bde2020/spark-master:2.4.5-hadoop2.7'
+    container_name: sparkmaster
 
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
