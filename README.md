@@ -43,6 +43,8 @@ Roadmap:
   - [ ] Try Python SDK in iPython
   - [ ] Try Java SDK in REPL
 - [ ] Nebula Build, Debug and Dev Env
+- [ ] Nebula Flink Connector Playground
+- [ ] Nebula Graph + DGL(Deep Graph Library)
 
 ### Install all in one
 ```bash
