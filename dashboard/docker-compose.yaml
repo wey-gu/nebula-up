@@ -11,7 +11,8 @@ services:
       - '--path.sysfs=/host/sys'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-    network_mode: host
+    networks:
+      - nebula-net
 
   nebula-stats-exporter:
     image: vesoft/nebula-stats-exporter:v3.1.0
@@ -42,8 +43,8 @@ services:
       - 9090:9090
     networks:
       - nebula-net
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
 
   nebula-http-gateway:
     image: vesoft/nebula-http-gateway:v2.2.0
