@@ -552,6 +552,8 @@ function install_nebula_graph_br {
 	fi
 	cd nebula-up && git stash 1>/dev/null 2>/dev/null && git pull 1>/dev/null 2>/dev/null
 	cd backup_restore
+	chmod +x scripts/nebula.service
+	ln -s ../../nebula-docker-compose/data data
 	docker-compose pull || logger_error "Failed to pull docker images for backup_restore env"
 	docker-compose up -d
 

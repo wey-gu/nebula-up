@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+case "$1" in
+  "start")
+    # as we cannot stop services, we use restart to make restore work, it's not for production use
+    docker restart ${HOSTNAME}
+    ;;
+  "status")
+    status=$(docker inspect -f '{{.State.Status}}' ${HOSTNAME});echo "${status^}" || echo "Exit"
+    ;;
+  "stop")
+    # stop container will cause agent to exit, too, this is just a hack to prevent it, not for production use
+    # we use start instead of stop here
+    docker start ${HOSTNAME}
+    ;;
+esac
