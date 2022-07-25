@@ -2,7 +2,7 @@
 case "$1" in
   "start")
     # as we cannot stop services, we use restart to make restore work, it's not for production use
-    docker restart ${HOSTNAME}
+    docker start ${HOSTNAME}
     ;;
   "status")
     status=$(docker inspect -f '{{.State.Status}}' ${HOSTNAME});echo "${status^}" || echo "Exit"
