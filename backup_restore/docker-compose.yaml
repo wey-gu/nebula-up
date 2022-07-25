@@ -53,47 +53,80 @@ services:
 
   metad0-agent:
     image: weygu/nebula-br:${BR_VERSION}
-    command: --agent="metad0:8888" --meta="metad0:9559"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts:/usr/local/nebula/scripts
+      - ./data/meta0:/data/meta
+    command: --agent="metad0:8888" --meta="metad0:9559" --debug
     network_mode: 'container:nebula-docker-compose_metad0_1'
 
   metad1-agent:
     image: weygu/nebula-br:${BR_VERSION}
-    command: --agent="metad1:8888" --meta="metad0:9559"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts:/usr/local/nebula/scripts
+      - ./data/meta1:/data/meta
+    command: --agent="metad1:8888" --meta="metad0:9559" --debug
     network_mode: 'container:nebula-docker-compose_metad1_1'
 
   metad2-agent:
     image: weygu/nebula-br:${BR_VERSION}
-    command: --agent="metad2:8888" --meta="metad0:9559"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts:/usr/local/nebula/scripts
+      - ./data/meta2:/data/meta
+    command: --agent="metad2:8888" --meta="metad0:9559" --debug
     network_mode: 'container:nebula-docker-compose_metad2_1'
 
   storaged0-agent:
     image: weygu/nebula-br:${BR_VERSION}
-    command: --agent="storaged0:8888" --meta="metad0:9559"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts:/usr/local/nebula/scripts
+      - ./data/storage0:/data/storage
+    command: --agent="storaged0:8888" --meta="metad0:9559" --debug
     network_mode: 'container:nebula-docker-compose_storaged0_1'
 
   storaged1-agent:
     image: weygu/nebula-br:${BR_VERSION}
-    command: --agent="storaged1:8888" --meta="metad0:9559"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts:/usr/local/nebula/scripts
+      - ./data/storage1:/data/storage
+    command: --agent="storaged1:8888" --meta="metad0:9559" --debug
     network_mode: 'container:nebula-docker-compose_storaged1_1'
 
   storaged2-agent:
     image: weygu/nebula-br:${BR_VERSION}
-    command: --agent="storaged2:8888" --meta="metad0:9559"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts:/usr/local/nebula/scripts
+      - ./data/storage2:/data/storage
+    command: --agent="storaged2:8888" --meta="metad0:9559" --debug
     network_mode: 'container:nebula-docker-compose_storaged2_1'
 
   graphd-agent:
     image: weygu/nebula-br:${BR_VERSION}
-    command: --agent="graphd:8888" --meta="metad0:9559"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts:/usr/local/nebula/scripts
+    command: --agent="graphd:8888" --meta="metad0:9559" --debug
     network_mode: 'container:nebula-docker-compose_graphd_1'
 
   graphd1-agent:
     image: weygu/nebula-br:${BR_VERSION}
-    command: --agent="graphd1:8888" --meta="metad0:9559"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts:/usr/local/nebula/scripts
+    command: --agent="graphd1:8888" --meta="metad0:9559" --debug
     network_mode: 'container:nebula-docker-compose_graphd1_1'
 
   graphd2-agent:
     image: weygu/nebula-br:${BR_VERSION}
-    command: --agent="graphd2:8888" --meta="metad0:9559"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts:/usr/local/nebula/scripts
+    command: --agent="graphd2:8888" --meta="metad0:9559" --debug
     network_mode: 'container:nebula-docker-compose_graphd2_1'
 
   minio-client:
