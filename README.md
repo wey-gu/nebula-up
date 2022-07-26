@@ -177,6 +177,8 @@ Note, you could also browser files in MinIO with from http://127.0.0.1:9001 with
 
 > Note, thanks to the sponsorship of Microsoft, we have a demo site of Nebula-UP on Azure: you could visit the MinIO site here: http://nebula-demo.siwei.io:9001 .
 
+**Limitation**: BR in Nebula-UP is not fully-functional for now. Please expect restore failure in final phases.
+
 --------------------------------------------
 
 ~~Windows with PowerShell~~(Working In Progress):
