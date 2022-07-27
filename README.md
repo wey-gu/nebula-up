@@ -15,7 +15,7 @@ curl -fsSL nebula-up.siwei.io/install.sh | bash
 ```
 ![nebula-up-demo-shell](./images/nebula-up-demo-shell.png)
 
-Note: you could specify the version of Nebula Graph like:
+Note: you could specify the version of NebulaGraph like:
 
 ```bash
 curl -fsSL nebula-up.siwei.io/install.sh | bash -s -- v2.6
@@ -29,22 +29,22 @@ With all-in-one mode, you could play with many Nebula Tools in one command, too:
 
 Roadmap:
 - [x] Nebula Dashboard
-- [x] Nebula Graph Studio
-- [x] Nebula Graph Console
+- [x] NebulaGraph Studio
+- [x] NebulaGraph Console
 - [x] Nebula BR(backup & restore)
-- [x] Nebula Graph Spark utils
-  - [x] Nebula Graph Spark Connector/PySpark REPL
-  - [x] Nebula Graph Algorithm
-  - [x] Nebula Graph Exchange
-- [x] Nebula Graph Importer
-- [ ] Nebula Graph Fulltext Search
+- [x] NebulaGraph Spark utils
+  - [x] NebulaGraph Spark Connector/PySpark REPL
+  - [x] NebulaGraph Algorithm
+  - [x] NebulaGraph Exchange
+- [x] NebulaGraph Importer
+- [ ] NebulaGraph Fulltext Search
 - [ ] Nebula Bench
 - [ ] Nebula Client REPL
   - [ ] Try Python SDK in iPython
   - [ ] Try Java SDK in REPL
 - [ ] Nebula Build, Debug and Dev Env
 - [ ] Nebula Flink Connector Playground
-- [ ] Nebula Graph + DGL(Deep Graph Library)
+- [x] NebulaGraph + DGL(Deep Graph Library)
 
 ### Install all in one
 ```bash
@@ -81,7 +81,7 @@ Then you could call Nebula Console like:
 Visit http://127.0.0.1:7003 with user: `root`, password: `nebula`.
 
 > Note, thanks to the sponsorship of Microsoft, we have a demo site of Nebula-UP on Azure: you could visit the dashboard here: http://nebula-demo.siwei.io:7003 .
-#### Access Nebula Graph Studio
+#### Access NebulaGraph Studio
 
 Visit http://127.0.0.1:7001 with user: `root`, password: `nebula`, host: `graphd:9669`(for non-all-in-one case, this should be `<host-ip>:9669`).
 
@@ -144,7 +144,7 @@ Or run an example Nebula Exchange job to import data from CSV file:
 ```
 You could check the example configuration file in `~/.nebula-up/nebula-up/spark/exchange.conf`
 
-#### Run Nebula Graph Algorithm
+#### Run NebulaGraph Algorithm
 
 > Reference: https://github.com/wey-gu/nebula-livejournal
 
@@ -178,6 +178,10 @@ Note, you could also browser files in MinIO with from http://127.0.0.1:9001 with
 > Note, thanks to the sponsorship of Microsoft, we have a demo site of Nebula-UP on Azure: you could visit the MinIO site here: http://nebula-demo.siwei.io:9001 .
 
 **Limitation**: BR in Nebula-UP is not fully-functional for now. Please expect restore failure in final phases.
+
+#### Play with NebulaGraph and Deep Graph Library(DGL)
+
+Please referring to [NebulaGraph-DGL Playground](https://github.com/wey-gu/nebula-dgl#playground).
 
 --------------------------------------------
 
