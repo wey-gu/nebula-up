@@ -191,13 +191,13 @@ Please, help issue or PR to add your new verified cases.
 
 |             | x86_Linux | x86_macOS             | x86_win               | arm_Linux                          | arm_macOS                          |
 | ----------- | --------- | --------------------- | --------------------- | ---------------------------------- | ---------------------------------- |
-| NebulaGraph | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅                                  | ✅(via Docker Desktop)              |
-| Studio      | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅(via Docker-emulated x86 Desktop) | ✅(via Docker Desktop-emulated x86) |
-|             | ✅         | ✅                     | ✅                     | ✅                                  | ✅                                  |
-|             | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | Not Verified                       | ✅(via Docker Desktop-emulated x86) |
-|             | ✅         | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
-| Spark       | ✅         | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
-|             | ✅         | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
+| NebulaGraph | ✅        | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅                                  | ✅(via Docker Desktop)              |
+| Studio      | ✅        | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅(via Docker-emulated x86 Desktop) | ✅(via Docker Desktop-emulated x86) |
+| Console     | ✅        | ✅                     | ✅                     | ✅                                  | ✅                                  |
+| Dashboard   | ✅        | ✅(via Docker Desktop) | ✅(via Docker Desktop) | Not Verified                       | ✅(via Docker Desktop-emulated x86) |
+| BR          | ✅        | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
+| Spark       | ✅        | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
+| Importer    | ✅        | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
 
 
 
