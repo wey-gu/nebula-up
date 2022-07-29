@@ -302,6 +302,13 @@ function waiting_for_nebula_graph_up {
 	fi
 }
 
+function remove_port_mappings {
+	# replace "9669:9669" with 9669 from docker-compose.yaml
+	sed -i '' 's/9669:9669/9669/g' docker-compose.yaml
+	# replace "sleep 3 " with "sleep 120 " from docker-compose.yaml
+	sed -i '' 's/sleep 3 /sleep 120 /g' docker-compose.yaml
+}
+
 function install_nebula_graph {
 	# TBD, considerring create gitee mirror for git repo? if is_CN_NETWORK is true.
 	# https://github.com/vesoft-inc/nebula-docker-compose
@@ -315,7 +322,10 @@ function install_nebula_graph {
 		logger_warn "$WOKRING_PATH/nebula-docker-compose already exists, existing repo will be reused"
 		fi
 	cd nebula-docker-compose && git checkout $NEBULA_VERSION 1>/dev/null 2>/dev/null
-	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
+	# if $PLATFORM equals to aarch64-darwin , we need to remove the port mappings in docker-compose.yaml
+	if [[ "$PLATFORM" == "aarch64-darwin" ]]; then
+		remove_port_mappings
+	fi
 	docker-compose pull
 	docker-compose up -d
 
@@ -338,7 +348,11 @@ function install_nebula_graph_studio {
 	mkdir nebula-graph-studio-v$STUDIO_VERSION && tar -zxvf nebula-graph-studio-v$STUDIO_VERSION.tar.gz -C nebula-graph-studio-v$STUDIO_VERSION 1>/dev/null 2>/dev/null
 	grep "external" nebula-graph-studio-v$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1 || \
 		echo "    external: true" >> nebula-graph-studio-v$STUDIO_VERSION/docker-compose.yml
-	sed -i 's/nebula-web/nebula-net/g' nebula-graph-studio-v$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1
+	if is_mac; then
+		sed -i "" 's/nebula-web/nebula-net/g' nebula-graph-studio-v$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1
+	else
+		sed -i 's/nebula-web/nebula-net/g' nebula-graph-studio-v$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1
+	fi
 	cd nebula-graph-studio-v$STUDIO_VERSION
 	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
@@ -362,7 +376,7 @@ function install_nebula_graph_console {
 # Usage: console.sh or console.sh -e "SHOW HOSTS"
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64;
-sudo docker run --rm -ti --network nebula-net --volume $WOKRING_PATH:/root vesoft/nebula-console:${CONSOLE_VERSION} -addr graphd -port 9669 -u root -p nebula "\$@"
+docker run --rm -ti --network nebula-net --volume $WOKRING_PATH:/root vesoft/nebula-console:${CONSOLE_VERSION} -addr graphd -port 9669 -u root -p nebula "\$@"
 EOF
 	sudo chmod +x $WOKRING_PATH/console.sh
 	logger_info "Created console.sh 😁"
