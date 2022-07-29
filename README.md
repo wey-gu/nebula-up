@@ -189,23 +189,31 @@ Please refer to [NebulaGraph-DGL Playground](https://github.com/wey-gu/nebula-dg
 
 Please, help issue or PR to add your new verified cases.
 
-| Function/Platform | x86_Linux | x86_macOS             | x86_win               | arm_Linux                          | arm_macOS                          |
-| ----------- | --------- | --------------------- | --------------------- | ---------------------------------- | ---------------------------------- |
-| NebulaGraph | ✅        | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅                                  | ✅(via Docker Desktop)              |
-| Studio      | ✅        | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅(via Docker-emulated x86 Desktop) | ✅(via Docker Desktop-emulated x86) |
-| Console     | ✅        | ✅                     | ✅                     | ✅                                  | ✅                                  |
-| Dashboard   | ✅        | ✅(via Docker Desktop) | ✅(via Docker Desktop) | Not Verified                       | ✅(via Docker Desktop-emulated x86) |
-| BR          | ✅        | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
-| Spark       | ✅        | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
-| Importer    | ✅        | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
+> ❓ stands for not verified/supported yet.
 
-| Command /Platform                                            | x86_Linux | x86_macOS    | x86_win      | arm_Linux    | arm_macOS    |
-| ------------------------------------------------------------ | --------- | ------------ | ------------ | ------------ | ------------ |
-| `curl -fsSL nebula-up.siwei.io/install.sh \| bash`            | ✅         | ✅            | ✅            | ✅            | ✅            |
-| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash`         | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
-| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 dashboard` | ✅         | ✅            | ✅            | Not Verified | ✅            |
-| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 br` | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
-| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 br` | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
+### Support matrix per function
+
+| Function/Platform | x86_Linux | x86_macOS             | x86_win               | arm_Linux                          | arm_macOS                          |
+| ----------------- | --------- | --------------------- | --------------------- | ---------------------------------- | ---------------------------------- |
+| NebulaGraph       | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅                                  | ✅(via Docker Desktop)              |
+| Studio            | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅(via Docker-emulated x86 Desktop) | ✅(via Docker Desktop-emulated x86) |
+| Console           | ✅         | ✅                     | ✅                     | ✅                                  | ✅                                  |
+| Dashboard         | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ❓                                  | ✅(via Docker Desktop-emulated x86) |
+| BR                | ✅         | ❓                     | ❓                     | ❓                                  | ❓                                  |
+| Spark             | ✅         | ❓                     | ❓                     | ❓                                  | ❓                                  |
+| Importer          | ✅         | ❓                     | ❓                     | ❓                                  | ❓                                  |
+
+
+
+### Support matrix per command
+
+| Command /Platform                                            | x86_Linux | x86_macOS | x86_win | arm_Linux | arm_macOS |
+| ------------------------------------------------------------ | --------- | --------- | ------- | --------- | --------- |
+| `curl -fsSL nebula-up.siwei.io/install.sh \| bash`           | ✅         | ✅         | ✅       | ✅         | ✅         |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash`        | ✅         | ❓         | ❓       | ❓         | ❓         |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 dashboard` | ✅         | ✅         | ✅       | ❓         | ✅         |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 br` | ✅         | ❓         | ❓       | ❓         | ❓         |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 br` | ✅         | ❓         | ❓       | ❓         | ❓         |
 
 
 
