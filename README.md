@@ -189,7 +189,7 @@ Please refer to [NebulaGraph-DGL Playground](https://github.com/wey-gu/nebula-dg
 
 Please, help issue or PR to add your new verified cases.
 
-|             | x86_Linux | x86_macOS             | x86_win               | arm_Linux                          | arm_macOS                          |
+| Function/Platform | x86_Linux | x86_macOS             | x86_win               | arm_Linux                          | arm_macOS                          |
 | ----------- | --------- | --------------------- | --------------------- | ---------------------------------- | ---------------------------------- |
 | NebulaGraph | ✅        | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅                                  | ✅(via Docker Desktop)              |
 | Studio      | ✅        | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅(via Docker-emulated x86 Desktop) | ✅(via Docker Desktop-emulated x86) |
@@ -199,17 +199,17 @@ Please, help issue or PR to add your new verified cases.
 | Spark       | ✅        | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
 | Importer    | ✅        | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
 
+| Command /Platform                                            | x86_Linux | x86_macOS    | x86_win      | arm_Linux    | arm_macOS    |
+| ------------------------------------------------------------ | --------- | ------------ | ------------ | ------------ | ------------ |
+| `curl -fsSL nebula-up.siwei.io/install.sh | bash`            | ✅         | ✅            | ✅            | ✅            | ✅            |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash`         | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash -s -- v3 dashboard` | ✅         | ✅            | ✅            | Not Verified | ✅            |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash -s -- v3 br` | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash -s -- v3 br` | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
+
 
 
 --------
-
-
-
-~~Windows with PowerShell~~(Working In Progress):
-
-```powershell
-iwr nebula-up.siwei.io/install.ps1 -useb | iex
-```
 
 TBD:
 - [ ] Finished Windows(Docker Desktop instead of the WSL 1&2 in initial phase) part, leveraging chocolatey package manager as homebrew was used in macOS
