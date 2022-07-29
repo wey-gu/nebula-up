@@ -303,6 +303,11 @@ function waiting_for_nebula_graph_up {
     fi
 }
 
+function remove_port_mappings {
+    # replace "9669:9669" with 9669 from docker-compose.yaml
+    sed -i '' 's/9669:9669/9669/g' docker-compose.yaml
+}
+
 function install_nebula_graph {
     # TBD, considerring create gitee mirror for git repo? if is_CN_NETWORK is true.
     # https://github.com/vesoft-inc/nebula-docker-compose
@@ -316,6 +321,11 @@ function install_nebula_graph {
         logger_warn "$WOKRING_PATH/nebula-docker-compose already exists, existing repo will be reused"
         fi
     cd nebula-docker-compose && git checkout $NEBULA_VERSION 1>/dev/null 2>/dev/null
+    # if $PLATFORM equals to aarch64-darwin , we need to remove the port mappings in docker-compose.yaml
+    if [[ "$PLATFORM" == "aarch64-darwin" ]]; then
+        remove_port_mappings
+    fi
+
     docker-compose pull
     docker-compose up -d
 
