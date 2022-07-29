@@ -4,9 +4,9 @@
 
 [![nebula-up demo](./images/nebula-up-demo.svg)](https://asciinema.org/a/407151 "Nebula Up Demo")
 
-`Nebula-Up` is PoC utility to enable developer to bootstrap an nebula-graph cluster with nebula-graph-studio(Web UI) + nebula-graph-console(Command UI) ready out of box in an oneliner run. All required packages will handled with `nebula-up` as well, including Docker on Linux(Ubuntu/CentOS), Docker Desktop on macOS(including both Intel and M1 chip based), and Docker Desktop Windows.
+`Nebula-Up` is a PoC utility to enable developer to bootstrap an nebula-graph cluster with nebula-graph-studio(Web UI) + nebula-graph-console(Command UI) ready out of box in an oneliner run. All required packages will be handled with `nebula-up` as well, including Docker on Linux(Ubuntu/CentOS), Docker Desktop on macOS(including both Intel and M1 chip-based), and Docker Desktop Windows.
 
-Also, it's optimized to leverage China Repo Mirrors(docker, brew, gitee, etc...) in case needed enable a smooth deployment for both Mainland China users and others.
+Also, it's optimized to leverage China Repo Mirrors(docker, brew, gitee, etc...) in case needed to enable a smooth deployment for both Mainland China users and others.
 
 macOS and Linux with Shell:
 
@@ -177,13 +177,33 @@ Note, you could also browser files in MinIO with from http://127.0.0.1:9001 with
 
 > Note, thanks to the sponsorship of Microsoft, we have a demo site of Nebula-UP on Azure: you could visit the MinIO site here: http://nebula-demo.siwei.io:9001 .
 
-**Limitation**: BR in Nebula-UP is not fully-functional for now. Please expect restore failure in final phases.
+**Limitation**: BR in Nebula-UP is not fully-functional for now. Please expect to restore failure in the final phases.
 
 #### Play with NebulaGraph and Deep Graph Library(DGL)
 
-Please referring to [NebulaGraph-DGL Playground](https://github.com/wey-gu/nebula-dgl#playground).
+Please refer to [NebulaGraph-DGL Playground](https://github.com/wey-gu/nebula-dgl#playground).
 
 --------------------------------------------
+
+## Support matrix
+
+Pleaseh help issue or PR to add your new verified cases.
+
+|             | x86_Linux | x86_macOS             | x86_win               | arm_Linux                          | arm_macOS                          |
+| ----------- | --------- | --------------------- | --------------------- | ---------------------------------- | ---------------------------------- |
+| NebulaGraph | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅                                  | ✅(via Docker Desktop)              |
+| Studio      | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅(via Docker-emulated x86 Desktop) | ✅(via Docker Desktop-emulated x86) |
+|             | ✅         | ✅                     | ✅                     | ✅                                  | ✅                                  |
+|             | ✅         | Not Verified          | ✅(via Docker Desktop) | Not Verified                       | Not Verified                       |
+|             | ✅         | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
+| Spark       | ✅         | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
+|             | ✅         | Not Verified          | Not Verified          | Not Verified                       | Not Verified                       |
+
+
+
+--------
+
+
 
 ~~Windows with PowerShell~~(Working In Progress):
 
