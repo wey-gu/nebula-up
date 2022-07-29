@@ -201,11 +201,11 @@ Please, help issue or PR to add your new verified cases.
 
 | Command /Platform                                            | x86_Linux | x86_macOS    | x86_win      | arm_Linux    | arm_macOS    |
 | ------------------------------------------------------------ | --------- | ------------ | ------------ | ------------ | ------------ |
-| `curl -fsSL nebula-up.siwei.io/install.sh | bash`            | ✅         | ✅            | ✅            | ✅            | ✅            |
-| `curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash`         | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
-| `curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash -s -- v3 dashboard` | ✅         | ✅            | ✅            | Not Verified | ✅            |
-| `curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash -s -- v3 br` | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
-| `curl -fsSL nebula-up.siwei.io/all-in-one.sh | bash -s -- v3 br` | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
+| `curl -fsSL nebula-up.siwei.io/install.sh \| bash`            | ✅         | ✅            | ✅            | ✅            | ✅            |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash`         | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 dashboard` | ✅         | ✅            | ✅            | Not Verified | ✅            |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 br` | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 br` | ✅         | Not Verified | Not Verified | Not Verified | Not Verified |
 
 
 
