@@ -341,7 +341,7 @@ function install_nebula_graph_studio {
 	if [ -d "$WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION" ]; then
 		rm -fr $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION
 	fi
-	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/${STUDIO_VERSION}nebula-graph-studio-$STUDIO_VERSION.tar.gz 1>/dev/null 2>/dev/null
+	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/${STUDIO_VERSION}/nebula-graph-studio-$STUDIO_VERSION.tar.gz 1>/dev/null 2>/dev/null
 	mkdir nebula-graph-studio-$STUDIO_VERSION && tar -zxvf nebula-graph-studio-$STUDIO_VERSION.tar.gz -C nebula-graph-studio-$STUDIO_VERSION 1>/dev/null 2>/dev/null
 	grep "external" nebula-graph-studio-$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1 || \
 		echo -e "\n    external: true" >> nebula-graph-studio-$STUDIO_VERSION/docker-compose.yml
@@ -697,9 +697,9 @@ function main {
 
 	*)
 		logger_info "VERSION not provided"
-		NEBULA_VERSION="v3.1.0"
-		STUDIO_VERSION="3.2.3"
-		CONSOLE_VERSION="v3.0.0"
+		NEBULA_VERSION="v3.2.0"
+		STUDIO_VERSION="3.4.1"
+		CONSOLE_VERSION="v3.2.0"
 		EXCHANGE_VERSION="3.0.0"
 		ALGO_VERSION="3.0.0"
 		SPARK_C_VERSION="3.0.0"
