@@ -338,24 +338,19 @@ function install_nebula_graph {
 
 function install_nebula_graph_studio {
 	cd $WOKRING_PATH
-	if [ -d "$WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION" ]; then
-		rm -fr $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION
+	if [ -d "$WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION" ]; then
+		rm -fr $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION
 	fi
-	if [ $STUDIO_VERSION = "3.1.0" ]; then
-		VERSION_FOLDER=""
-	else
-		VERSION_FOLDER="$STUDIO_VERSION/"
-	fi
-	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/${VERSION_FOLDER}nebula-graph-studio-v$STUDIO_VERSION.tar.gz 1>/dev/null 2>/dev/null
-	mkdir nebula-graph-studio-v$STUDIO_VERSION && tar -zxvf nebula-graph-studio-v$STUDIO_VERSION.tar.gz -C nebula-graph-studio-v$STUDIO_VERSION 1>/dev/null 2>/dev/null
-	grep "external" nebula-graph-studio-v$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1 || \
-		echo "    external: true" >> nebula-graph-studio-v$STUDIO_VERSION/docker-compose.yml
+	wget https://oss-cdn.nebula-graph.com.cn/nebula-graph-studio/${STUDIO_VERSION}nebula-graph-studio-$STUDIO_VERSION.tar.gz 1>/dev/null 2>/dev/null
+	mkdir nebula-graph-studio-$STUDIO_VERSION && tar -zxvf nebula-graph-studio-$STUDIO_VERSION.tar.gz -C nebula-graph-studio-$STUDIO_VERSION 1>/dev/null 2>/dev/null
+	grep "external" nebula-graph-studio-$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1 || \
+		echo -e "\n    external: true" >> nebula-graph-studio-$STUDIO_VERSION/docker-compose.yml
 	if is_mac; then
-		sed -i "" 's/nebula-web/nebula-net/g' nebula-graph-studio-v$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1
+		sed -i "" 's/nebula-web/nebula-net/g' nebula-graph-studio-$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1
 	else
-		sed -i 's/nebula-web/nebula-net/g' nebula-graph-studio-v$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1
+		sed -i 's/nebula-web/nebula-net/g' nebula-graph-studio-$STUDIO_VERSION/docker-compose.yml > /dev/null 2>&1
 	fi
-	cd nebula-graph-studio-v$STUDIO_VERSION
+	cd nebula-graph-studio-$STUDIO_VERSION
 	export DOCKER_DEFAULT_PLATFORM=linux/amd64
 	# FIXME, before we have ARM Linux images released, let's hardcode it inti x86_64
 	docker-compose pull
@@ -413,7 +408,7 @@ function create_uninstall_script {
 # Usage: uninstall.sh
 
 echo " ℹ️   Cleaning Up Files under $WOKRING_PATH..."
-cd $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION 2>/dev/null
+cd $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION 2>/dev/null
 docker-compose down 2>/dev/null
 cd $WOKRING_PATH/nebula-up/dashboard 2>/dev/null
 docker-compose down 2>/dev/null
@@ -426,7 +421,7 @@ sudo docker volume rm spark_hadoop_datanode spark_hadoop_historyserver spark_had
 cd $WOKRING_PATH/nebula-docker-compose 2>/dev/null
 docker-compose down 2>/dev/null
 
-sudo rm -fr $WOKRING_PATH/nebula-graph-studio-v$STUDIO_VERSION $WOKRING_PATH/nebula-docker-compose $WOKRING_PATH/nebula-up 2>/dev/null
+sudo rm -fr $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION $WOKRING_PATH/nebula-docker-compose $WOKRING_PATH/nebula-up 2>/dev/null
 echo "┌────────────────────────────────────────┐"
 echo "│ 🌌 Nebula-Up Uninstallation Finished   │"
 echo "└────────────────────────────────────────┘"
