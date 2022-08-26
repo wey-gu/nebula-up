@@ -18,7 +18,7 @@ curl -fsSL nebula-up.siwei.io/install.sh | bash
 Note: you could specify the version of NebulaGraph like:
 
 ```bash
-curl -fsSL nebula-up.siwei.io/install.sh | bash -s -- v2.6
+curl -fsSL nebula-up.siwei.io/install.sh | bash -s -- v3
 ```
 
 ## All-in-one mode
