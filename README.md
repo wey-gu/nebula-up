@@ -198,7 +198,7 @@ Please, help issue or PR to add your new verified cases.
 | NebulaGraph       | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅                                  | ✅(via Docker Desktop)              |
 | Studio            | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅(via Docker-emulated x86 Desktop) | ✅(via Docker Desktop-emulated x86) |
 | Console           | ✅         | ✅                     | ✅                     | ✅                                  | ✅                                  |
-| Dashboard         | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ❓                                  | ✅(via Docker Desktop-emulated x86) |
+| Dashboard         | ✅         | ✅(via Docker Desktop) | ✅(via Docker Desktop) | ✅(via tonistiigi/binfmt)           | ✅(via Docker Desktop-emulated x86) |
 | BR                | ✅         | ❓                     | ❓                     | ❓                                  | ❓                                  |
 | Spark             | ✅         | ❓                     | ❓                     | ❓                                  | ❓                                  |
 | Importer          | ✅         | ❓                     | ❓                     | ❓                                  | ❓                                  |
@@ -211,7 +211,7 @@ Please, help issue or PR to add your new verified cases.
 | ------------------------------------------------------------ | --------- | --------- | ------- | --------- | --------- |
 | `curl -fsSL nebula-up.siwei.io/install.sh \| bash`           | ✅         | ✅         | ✅       | ✅         | ✅         |
 | `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash`        | ✅         | ❓         | ❓       | ❓         | ❓         |
-| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 dashboard` | ✅         | ✅         | ✅       | ❓         | ✅         |
+| `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 dashboard` | ✅         | ✅         | ✅       | ✅         | ✅         |
 | `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 br` | ✅         | ❓         | ❓       | ❓         | ❓         |
 | `curl -fsSL nebula-up.siwei.io/all-in-one.sh \| bash -s -- v3 br` | ✅         | ❓         | ❓       | ❓         | ❓         |
 
