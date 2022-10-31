@@ -429,6 +429,14 @@ EOF
 	sudo chmod +x $WOKRING_PATH/uninstall.sh
 }
 
+function install_binfmt_on_linux_arm64 {
+	# if PLATFORM is aarch64-linux, install binfmt-support
+	if [ "$PLATFORM" = "aarch64-linux" ]; then
+		logger_info "Installing binfmt-support for aarch64-linux"
+		docker run --privileged --rm tonistiigi/binfmt --install amd64
+	fi
+}
+
 function install_nebula_graph_dashboard {
 	# if DASHBOARD is not true, then skip, else continue to install.
 	if [ "$DASHBOARD" != "true" ]; then
