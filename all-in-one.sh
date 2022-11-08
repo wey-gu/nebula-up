@@ -276,7 +276,7 @@ function check_ports_availability {
 	# TBD
 }
 
-# Deploy Nebula Graph
+# Deploy NebulaGraph
 
 function waiting_for_nebula_graph_up {
 	logger_info "Waiting for all nebula-graph containers to be healthy..."
@@ -333,7 +333,7 @@ function install_nebula_graph {
 
 }
 
-# Deploy Nebula Graph Studio
+# Deploy NebulaGraph Studio
 
 
 function install_nebula_graph_studio {
@@ -529,7 +529,7 @@ sudo docker run --rm -ti \\
     --network=nebula-net \\
     -v $WOKRING_PATH/nebula-up/importer/LiveJournal.yaml:/root/importer.yaml \\
     -v $WOKRING_PATH/nebula-up/spark/download:/root \\
-    vesoft/nebula-importer:v3.1.0 \\
+    vesoft/nebula-importer:v3.2.0 \\
     --config /root/importer.yaml
 
 EOF
@@ -686,7 +686,7 @@ function print_footer_error {
 function main {
 	print_banner
 	case $NEBULA_VERSION in
-	v3.2 | 3.2 | 3.2.0 | v3 )
+	v3.2 | 3.2 | 3.2.0 )
 		NEBULA_VERSION="v3.2.0"
 		STUDIO_VERSION="3.4.1"
 		CONSOLE_VERSION="v3.2.0"
@@ -703,17 +703,17 @@ function main {
 		SPARK_C_VERSION="3.0.0"
 		;;
 
-	*)
+	* | v3.3 | 3.3 | 3.3.0 | v3 )
 		logger_info "VERSION not provided"
-		NEBULA_VERSION="v3.2.0"
-		STUDIO_VERSION="3.4.1"
-		CONSOLE_VERSION="v3.2.0"
+		NEBULA_VERSION="v3.3.0"
+		STUDIO_VERSION="3.5.0"
+		CONSOLE_VERSION="v3.3.0"
 		EXCHANGE_VERSION="3.0.0"
 		ALGO_VERSION="3.0.0"
 		SPARK_C_VERSION="3.0.0"
 		;;
 	esac
-	logger_info "Installing Nebula Graph $NEBULA_VERSION"
+	logger_info "Installing NebulaGraph $NEBULA_VERSION"
 
 	case $MODE in
 	all )
@@ -771,22 +771,22 @@ function main {
 	logger_info "Ensuring Depedencies..."
 	excute_step ensure_dependencies
 
-	logger_info "Boostraping Nebula Graph Cluster with Docker Compose..."
+	logger_info "Boostraping NebulaGraph Cluster with Docker Compose..."
 	excute_step install_nebula_graph
 
-	logger_info "Boostraping Nebula Graph Studio with Docker Compose..."
+	logger_info "Boostraping NebulaGraph Studio with Docker Compose..."
 	excute_step install_nebula_graph_studio
 
-	logger_info "Preparing Nebula Graph Console Script..."
+	logger_info "Preparing NebulaGraph Console Script..."
 	excute_step install_nebula_graph_console
 
-	logger_info "Installing Nebula Graph Dashboard..."
+	logger_info "Installing NebulaGraph Dashboard..."
 	excute_step install_nebula_graph_dashboard
 
-	logger_info "Installing Nebula Graph Spark Connector, Exchange & Algorithm..."
+	logger_info "Installing NebulaGraph Spark Connector, Exchange & Algorithm..."
 	excute_step install_nebula_graph_spark
 
-	logger_info "Installing Nebula Graph Backup and Restore..."
+	logger_info "Installing NebulaGraph Backup and Restore..."
 	excute_step install_nebula_graph_br
 
 	excute_step waiting_for_nebula_graph_up

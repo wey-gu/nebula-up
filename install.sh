@@ -277,7 +277,7 @@ function check_ports_availability {
     # TBD
 }
 
-# Deploy Nebula Graph
+# Deploy NebulaGraph
 
 function waiting_for_nebula_graph_up {
     logger_info "Waiting for all nebula-graph containers to be healthy..."
@@ -335,7 +335,7 @@ function install_nebula_graph {
 
 }
 
-# Deploy Nebula Graph Studio
+# Deploy NebulaGraph Studio
 
 
 function install_nebula_graph_studio {
@@ -453,12 +453,12 @@ function print_footer_error {
 function main {
     print_banner
     case $NEBULA_VERSION in
-    v3.2 | 3.2 | 3.2.0 | v3 )
+    v3.2 | 3.2 | 3.2.0 )
         NEBULA_VERSION="v3.2.0"
         STUDIO_VERSION="3.4.1"
         CONSOLE_VERSION="v3.2.0"
         ;;
-    v3.1 | 3.1 | 3.1.0  )
+    v3.1 | 3.1 | 3.1.0 )
         NEBULA_VERSION="v3.1.0"
         STUDIO_VERSION="3.2.3"
         CONSOLE_VERSION="v3.0.0"
@@ -475,19 +475,18 @@ function main {
         CONSOLE_VERSION="v3.0.0"
         ;;
     v2.6 | 2.6 | 2.6.3 | v2.6.3 | 2.6.* | v2.6.* )
-        logger_info "VERSION not provided"
         NEBULA_VERSION="v2.6"
         STUDIO_VERSION="3.1.0"
         CONSOLE_VERSION="v2.6.0"
         ;;
-    *)
+    * | v3.3 | 3.3 | 3.3.0 | v3 )
         logger_info "VERSION not provided"
-        NEBULA_VERSION="v3.2.0"
-        STUDIO_VERSION="3.4.1"
-        CONSOLE_VERSION="v3.2.0"
+        NEBULA_VERSION="v3.3.0"
+        STUDIO_VERSION="3.5.0"
+        CONSOLE_VERSION="v3.3.0"
         ;;
     esac
-    logger_info "Installing Nebula Graph $NEBULA_VERSION"
+    logger_info "Installing NebulaGraph $NEBULA_VERSION"
 
     CURRENT_PATH="$pwd"
     WOKRING_PATH="$HOME/.nebula-up"
@@ -505,13 +504,13 @@ function main {
     logger_info "Ensuring Depedencies..."
     excute_step ensure_dependencies
 
-    logger_info "Boostraping Nebula Graph Cluster with Docker Compose..."
+    logger_info "Boostraping NebulaGraph Cluster with Docker Compose..."
     excute_step install_nebula_graph
 
-    logger_info "Boostraping Nebula Graph Studio with Docker Compose..."
+    logger_info "Boostraping NebulaGraph Studio with Docker Compose..."
     excute_step install_nebula_graph_studio
 
-    logger_info "Preparing Nebula Graph Console Script..."
+    logger_info "Preparing NebulaGraph Console Script..."
     excute_step install_nebula_graph_console
 
     excute_step waiting_for_nebula_graph_up
