@@ -529,7 +529,7 @@ sudo docker run --rm -ti \\
     --network=nebula-net \\
     -v $WOKRING_PATH/nebula-up/importer/LiveJournal.yaml:/root/importer.yaml \\
     -v $WOKRING_PATH/nebula-up/spark/download:/root \\
-    vesoft/nebula-importer:v3.1.0 \\
+    vesoft/nebula-importer:v3.2.0 \\
     --config /root/importer.yaml
 
 EOF
@@ -686,7 +686,15 @@ function print_footer_error {
 function main {
 	print_banner
 	case $NEBULA_VERSION in
-	v3.2 | 3.2 | 3.2.0 | v3 )
+	v3.3 | 3.3 | 3.3.0 | v3 )
+		NEBULA_VERSION="v3.3.0"
+		STUDIO_VERSION="3.5.0"
+		CONSOLE_VERSION="v3.3.0"
+		EXCHANGE_VERSION="3.0.0"
+		ALGO_VERSION="3.0.0"
+		SPARK_C_VERSION="3.0.0"
+		;;
+	v3.2 | 3.2 | 3.2.0 )
 		NEBULA_VERSION="v3.2.0"
 		STUDIO_VERSION="3.4.1"
 		CONSOLE_VERSION="v3.2.0"
