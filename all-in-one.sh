@@ -276,7 +276,7 @@ function check_ports_availability {
 	# TBD
 }
 
-# Deploy Nebula Graph
+# Deploy NebulaGraph
 
 function waiting_for_nebula_graph_up {
 	logger_info "Waiting for all nebula-graph containers to be healthy..."
@@ -333,7 +333,7 @@ function install_nebula_graph {
 
 }
 
-# Deploy Nebula Graph Studio
+# Deploy NebulaGraph Studio
 
 
 function install_nebula_graph_studio {
@@ -713,7 +713,7 @@ function main {
 		SPARK_C_VERSION="3.0.0"
 		;;
 	esac
-	logger_info "Installing Nebula Graph $NEBULA_VERSION"
+	logger_info "Installing NebulaGraph $NEBULA_VERSION"
 
 	case $MODE in
 	all )
@@ -771,22 +771,22 @@ function main {
 	logger_info "Ensuring Depedencies..."
 	excute_step ensure_dependencies
 
-	logger_info "Boostraping Nebula Graph Cluster with Docker Compose..."
+	logger_info "Boostraping NebulaGraph Cluster with Docker Compose..."
 	excute_step install_nebula_graph
 
-	logger_info "Boostraping Nebula Graph Studio with Docker Compose..."
+	logger_info "Boostraping NebulaGraph Studio with Docker Compose..."
 	excute_step install_nebula_graph_studio
 
-	logger_info "Preparing Nebula Graph Console Script..."
+	logger_info "Preparing NebulaGraph Console Script..."
 	excute_step install_nebula_graph_console
 
-	logger_info "Installing Nebula Graph Dashboard..."
+	logger_info "Installing NebulaGraph Dashboard..."
 	excute_step install_nebula_graph_dashboard
 
-	logger_info "Installing Nebula Graph Spark Connector, Exchange & Algorithm..."
+	logger_info "Installing NebulaGraph Spark Connector, Exchange & Algorithm..."
 	excute_step install_nebula_graph_spark
 
-	logger_info "Installing Nebula Graph Backup and Restore..."
+	logger_info "Installing NebulaGraph Backup and Restore..."
 	excute_step install_nebula_graph_br
 
 	excute_step waiting_for_nebula_graph_up
