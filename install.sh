@@ -453,11 +453,6 @@ function print_footer_error {
 function main {
     print_banner
     case $NEBULA_VERSION in
-    v3.3 | 3.3 | 3.3.0 | v3 )
-        NEBULA_VERSION="v3.3.0"
-        STUDIO_VERSION="3.5.0"
-        CONSOLE_VERSION="v3.3.0"
-        ;;
     v3.2 | 3.2 | 3.2.0 )
         NEBULA_VERSION="v3.2.0"
         STUDIO_VERSION="3.4.1"
@@ -480,16 +475,15 @@ function main {
         CONSOLE_VERSION="v3.0.0"
         ;;
     v2.6 | 2.6 | 2.6.3 | v2.6.3 | 2.6.* | v2.6.* )
-        logger_info "VERSION not provided"
         NEBULA_VERSION="v2.6"
         STUDIO_VERSION="3.1.0"
         CONSOLE_VERSION="v2.6.0"
         ;;
-    *)
+    * | v3.3 | 3.3 | 3.3.0 | v3 )
         logger_info "VERSION not provided"
-        NEBULA_VERSION="v3.2.0"
-        STUDIO_VERSION="3.4.1"
-        CONSOLE_VERSION="v3.2.0"
+        NEBULA_VERSION="v3.3.0"
+        STUDIO_VERSION="3.5.0"
+        CONSOLE_VERSION="v3.3.0"
         ;;
     esac
     logger_info "Installing Nebula Graph $NEBULA_VERSION"
