@@ -460,18 +460,18 @@ function main {
         ;;
     v3.1 | 3.1 | 3.1.0 )
         NEBULA_VERSION="v3.1.0"
-        STUDIO_VERSION="3.2.3"
+        STUDIO_VERSION="3.2.4"
         CONSOLE_VERSION="v3.0.0"
         ;;
 
     v3.0.1 | 3.0.1 | 3.0 | v3.0 )
         NEBULA_VERSION="v3.0.1"
-        STUDIO_VERSION="3.2.3"
+        STUDIO_VERSION="3.2.4"
         CONSOLE_VERSION="v3.0.0"
         ;;
     v3.0.0 | 3.0.0 )
         NEBULA_VERSION="v3.0.0"
-        STUDIO_VERSION="3.2.3"
+        STUDIO_VERSION="3.2.4"
         CONSOLE_VERSION="v3.0.0"
         ;;
     v2.6 | 2.6 | 2.6.3 | v2.6.3 | 2.6.* | v2.6.* )
