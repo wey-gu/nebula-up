@@ -15,7 +15,7 @@ services:
       - nebula-net
 
   nebula-stats-exporter:
-    image: vesoft/nebula-stats-exporter:v3.1.0
+    image: vesoft/nebula-stats-exporter:v3.3.0
     platform: amd64
     command:
       - --bare-metal
@@ -48,7 +48,7 @@ services:
     #   - "host.docker.internal:host-gateway"
 
   nebula-http-gateway:
-    image: vesoft/nebula-http-gateway:v2.2.0
+    image: vesoft/nebula-http-gateway:nightly
     platform: amd64
     volumes:
       - ./nebula-http-gateway.conf:/root/conf/app.conf
@@ -62,7 +62,7 @@ services:
       - nebula-net
 
   nebula-dashboard:
-    image: weygu/nebula-dashboard:v1.1.1
+    image: weygu/nebula-dashboard:v3.2.0
     platform: amd64
     ports:
       - 7003:7003
