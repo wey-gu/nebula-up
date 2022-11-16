@@ -696,7 +696,7 @@ function main {
 		;;
 	v3.1 | 3.1 | 3.1.0  )
 		NEBULA_VERSION="v3.1.0"
-		STUDIO_VERSION="3.2.5"
+		STUDIO_VERSION="3.2.4"
 		CONSOLE_VERSION="v3.0.0"
 		EXCHANGE_VERSION="3.0.0"
 		ALGO_VERSION="3.0.0"
@@ -707,7 +707,7 @@ function main {
 		logger_info "VERSION not provided"
 		NEBULA_VERSION="v3.3.0"
 		STUDIO_VERSION="3.5.0"
-		CONSOLE_VERSION="v3.3.1"
+		CONSOLE_VERSION="v3.3.0"
 		EXCHANGE_VERSION="3.0.0"
 		ALGO_VERSION="3.0.0"
 		SPARK_C_VERSION="3.0.0"
