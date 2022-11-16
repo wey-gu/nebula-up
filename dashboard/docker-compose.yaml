@@ -56,8 +56,6 @@ services:
       USER: root
     ports:
       - 8080
-    volumes:
-      - ${UPLOAD_DIR}:${MAPPING_DOCKER_DIR}:rw
     networks:
       - nebula-net
 
