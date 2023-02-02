@@ -650,19 +650,19 @@ function create_service_lifecycle_scripts {
 
 # Usage: nebula-start.sh
 
-# start nebulagraph
+echo trying to start nebulagraph if installed...
 cd $WOKRING_PATH/nebula-docker-compose && docker-compose up -d
 
-# start spark
+echo trying to start spark if installed...
 cd $WOKRING_PATH/spark 2>/dev/null && docker-compose up -d
 
-# start nebula-graph-studio
+echo trying to start nebula-graph-studio if installed...
 cd $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION 2>/dev/null && docker-compose up -d
 
-# start dashboard
+echo trying to start dashboard if installed...
 cd $WOKRING_PATH/dashboard 2>/dev/null && docker-compose up -d
 
-# start backup_restore
+echo trying to start backup_restore if installed...
 cd $WOKRING_PATH/backup_restore 2>/dev/null && docker-compose up -d
 
 EOF
@@ -674,19 +674,19 @@ EOF
 
 # Usage: nebula-stop.sh
 
-# stop nebulagraph
+echo trying to stop nebulagraph if installed...
 cd $WOKRING_PATH/nebula-docker-compose && docker-compose down
 
-# stop spark
+echo trying to stop spark if installed...
 cd $WOKRING_PATH/spark 2>/dev/null && docker-compose down
 
-# stop nebula-graph-studio
+echo trying to stop nebula-graph-studio if installed...
 cd $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION 2>/dev/null && docker-compose down
 
-# stop dashboard
+echo trying to stop dashboard if installed...
 cd $WOKRING_PATH/dashboard 2>/dev/null && docker-compose down
 
-# stop backup_restore
+echo trying to stop backup_restore if installed...
 cd $WOKRING_PATH/backup_restore 2>/dev/null && docker-compose down
 
 EOF
