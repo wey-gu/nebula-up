@@ -160,8 +160,6 @@ Run Nebula Algorithm like:
 ~/.nebula-up/nebula-algo-pagerank-example.sh
 ```
 
-
-
 #### Try Backup and Restore with MinIO as Storage
 
 ```bash
