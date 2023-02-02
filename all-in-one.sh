@@ -40,7 +40,7 @@ function excute_step {
 
 function print_banner {
 	echo '┌──────────────────────────────────────────────────────────────────────────────────────────┐'
-	echo '│ 🌌 Nebula-Graph Playground is on the way...                                              │'
+	echo '│ 🌌 NebulaGraph Playground is on the way...                                               │'
 	echo '├──────────────────────────────────────────────────────────────────────────────────────────┤'
 	echo '│.__   __.  _______ .______    __    __   __          ___            __    __  .______     │'
 	echo '│|  \ |  | |   ____||   _  \  |  |  |  | |  |        /   \          |  |  |  | |   _  \    │'
@@ -279,7 +279,7 @@ function check_ports_availability {
 # Deploy NebulaGraph
 
 function waiting_for_nebula_graph_up {
-	logger_info "Waiting for all nebula-graph containers to be healthy..."
+	logger_info "Waiting for all nebulagraph containers to be healthy..."
 	expected_containers_count_str="9"
 	healthy_containers_count_str=""
 	local max_attempts=${MAX_ATTEMPTS-6}
@@ -290,7 +290,7 @@ function waiting_for_nebula_graph_up {
 	do
 		healthy_containers_count_str=$(docker-compose ps --filter health=healthy | grep 'Up ('|wc -l|sed -e 's/^[[:space:]]*//')
 		if [[ "$healthy_containers_count_str" == "$expected_containers_count_str" ]]; then
-			logger_ok "all nebula-graph containers are healthy."
+			logger_ok "all nebulagraph containers are healthy."
 			break
 		fi
 		logger_info "Nebula-Graph Containers Healthcheck Attempt: ${attempt-0} Failed, Retrying in $timer Seconds..."
@@ -654,7 +654,7 @@ function create_service_lifecycle_scripts {
 cd $WOKRING_PATH/nebula-docker-compose && docker-compose up -d
 
 # start spark
-cd $WOKRING_PATH/spark && docker-compose up -d
+cd $WOKRING_PATH/spark 2>/dev/null && docker-compose up -d
 
 # start nebula-graph-studio
 cd $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION 2>/dev/null && docker-compose up -d
@@ -678,7 +678,7 @@ EOF
 cd $WOKRING_PATH/nebula-docker-compose && docker-compose down
 
 # stop spark
-cd $WOKRING_PATH/spark && docker-compose down
+cd $WOKRING_PATH/spark 2>/dev/null && docker-compose down
 
 # stop nebula-graph-studio
 cd $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION 2>/dev/null && docker-compose down
@@ -698,7 +698,7 @@ EOF
 function print_footer {
 
 	echo "┌────────────────────────────────────────┐"
-	echo "│ 🌌 Nebula-Graph Playground is Up now!  │"
+	echo "│ 🌌 NebulaGraph Playground is Up now!  │"
 	echo "├────────────────────────────────────────┤"
 	echo "│                                        │"
 	echo "│ 🎉 Congrats! Your Nebula is Up now!    │"
@@ -846,7 +846,7 @@ function main {
 	logger_info "Installing NebulaGraph Backup and Restore..."
 	excute_step install_nebula_graph_br
 
-    logger_info "Preparing NebulaGraph Lifecycle Mgmt. Script..."
+	logger_info "Preparing NebulaGraph Lifecycle Mgmt. Script..."
 	excute_step create_service_lifecycle_scripts
 
 	excute_step waiting_for_nebula_graph_up
