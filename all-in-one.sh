@@ -716,6 +716,10 @@ function print_footer {
 	echo "│    $ ~/.nebula-up/console.sh           │"
 	echo "│    To remove the playground:           │"
 	echo "│    $ ~/.nebula-up/uninstall.sh         │"
+	echo "│    To stop the playground:             │"
+	echo "│    $ ~/.nebula-up/nebula-stop.sh       │"
+	echo "│    To start the playground:            │"
+	echo "│    $ ~/.nebula-up/nebula-start.sh      │"
 	echo "│                                        │"
 	echo "│ 🚀 Have Fun!                           │"
 	echo "│                                        │"
@@ -841,6 +845,9 @@ function main {
 
 	logger_info "Installing NebulaGraph Backup and Restore..."
 	excute_step install_nebula_graph_br
+
+    logger_info "Preparing NebulaGraph Lifecycle Mgmt. Script..."
+	excute_step create_service_lifecycle_scripts
 
 	excute_step waiting_for_nebula_graph_up
 
