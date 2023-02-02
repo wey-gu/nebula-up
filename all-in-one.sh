@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: install.sh
@@ -365,9 +365,9 @@ function install_nebula_graph_console {
 
 	sudo bash -c "cat > $WOKRING_PATH/console.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: console.sh or console.sh -e "SHOW HOSTS"
@@ -380,9 +380,9 @@ EOF
 
 	sudo bash -c "cat > $WOKRING_PATH/load-basketballplayer-dataset.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: load-basketballplayer-dataset.sh
@@ -400,9 +400,9 @@ EOF
 function create_uninstall_script {
 	sudo bash -c "WOKRING_PATH=$WOKRING_PATH;cat > $WOKRING_PATH/uninstall.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: uninstall.sh
@@ -487,9 +487,9 @@ function install_nebula_graph_spark {
 	fi
 	sudo bash -c "cat > $WOKRING_PATH/nebula-pyspark.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: nebula-pyspark.sh
@@ -502,9 +502,9 @@ EOF
 
 	sudo bash -c "cat > $WOKRING_PATH/nebula-exchange-example.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: nebula-exchange-example.sh
@@ -517,9 +517,9 @@ EOF
 
 	sudo bash -c "cat > $WOKRING_PATH/load-LiveJournal-dataset.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: load-LiveJournal-dataset.sh
@@ -538,9 +538,9 @@ EOF
 
 	sudo bash -c "cat > $WOKRING_PATH/nebula-algo-pagerank-example.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: nebula-algo-pagerank-example.sh
@@ -578,9 +578,9 @@ function install_nebula_graph_br {
 
 	sudo bash -c "cat > $WOKRING_PATH/nebula-br.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: nebula-br.sh --help or nebula-br.sh show --help
@@ -594,9 +594,9 @@ EOF
 
 	sudo bash -c "cat > $WOKRING_PATH/nebula-br-backup-full.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: nebula-br-backup-full.sh
@@ -610,9 +610,9 @@ EOF
 
 	sudo bash -c "cat > $WOKRING_PATH/nebula-br-show.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: nebula-br-show.sh
@@ -625,9 +625,9 @@ EOF
 
 	sudo bash -c "cat > $WOKRING_PATH/nebula-br-restore-full.sh" << EOF
 #!/usr/bin/env bash
-# Copyright (c) 2021 vesoft inc. All rights reserved.
+# Copyright (c) 2023 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
+# This source code is licensed under Apache 2.0 License
 
 
 # Usage: nebula-br-restore-full.sh
@@ -640,7 +640,60 @@ EOF
 
 }
 
+function create_service_lifecycle_scripts {
+	sudo bash -c "cat > $WOKRING_PATH/nebula-start.sh" << EOF
+#!/usr/bin/env bash
+# Copyright (c) 2023 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License
 
+
+# Usage: nebula-start.sh
+
+# start nebulagraph
+cd $WOKRING_PATH/nebula-docker-compose && docker-compose up -d
+
+# start spark
+cd $WOKRING_PATH/spark && docker-compose up -d
+
+# start nebula-graph-studio
+cd $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION 2>/dev/null && docker-compose up -d
+
+# start dashboard
+cd $WOKRING_PATH/dashboard 2>/dev/null && docker-compose up -d
+
+# start backup_restore
+cd $WOKRING_PATH/backup_restore 2>/dev/null && docker-compose up -d
+
+EOF
+	sudo chmod +x $WOKRING_PATH/nebula-start.sh
+	logger_info "Created nebula-start.sh 😁"
+
+	sudo bash -c "cat > $WOKRING_PATH/nebula-stop.sh" << EOF
+#!/usr/bin/env bash
+
+# Usage: nebula-stop.sh
+
+# stop nebulagraph
+cd $WOKRING_PATH/nebula-docker-compose && docker-compose down
+
+# stop spark
+cd $WOKRING_PATH/spark && docker-compose down
+
+# stop nebula-graph-studio
+cd $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION 2>/dev/null && docker-compose down
+
+# stop dashboard
+cd $WOKRING_PATH/dashboard 2>/dev/null && docker-compose down
+
+# stop backup_restore
+cd $WOKRING_PATH/backup_restore 2>/dev/null && docker-compose down
+
+EOF
+	sudo chmod +x $WOKRING_PATH/nebula-stop.sh
+	logger_info "Created nebula-stop.sh 😁"
+
+}
 
 function print_footer {
 
