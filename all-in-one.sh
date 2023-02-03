@@ -654,16 +654,16 @@ echo trying to start nebulagraph if installed...
 cd $WOKRING_PATH/nebula-docker-compose && docker-compose up -d
 
 echo trying to start spark if installed...
-cd $WOKRING_PATH/spark 2>/dev/null && docker-compose up -d
+cd $WOKRING_PATH/nebula-up/spark 2>/dev/null && docker-compose up -d
 
 echo trying to start nebula-graph-studio if installed...
 cd $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION 2>/dev/null && docker-compose up -d
 
 echo trying to start dashboard if installed...
-cd $WOKRING_PATH/dashboard 2>/dev/null && docker-compose up -d
+cd $WOKRING_PATH/nebula-up/dashboard 2>/dev/null && docker-compose up -d
 
 echo trying to start backup_restore if installed...
-cd $WOKRING_PATH/backup_restore 2>/dev/null && docker-compose up -d
+cd $WOKRING_PATH/nebula-up/backup_restore 2>/dev/null && docker-compose up -d
 
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-start.sh
@@ -678,16 +678,16 @@ echo trying to stop nebulagraph if installed...
 cd $WOKRING_PATH/nebula-docker-compose && docker-compose down
 
 echo trying to stop spark if installed...
-cd $WOKRING_PATH/spark 2>/dev/null && docker-compose down
+cd $WOKRING_PATH/nebula-up/spark 2>/dev/null && docker-compose down
 
 echo trying to stop nebula-graph-studio if installed...
 cd $WOKRING_PATH/nebula-graph-studio-$STUDIO_VERSION 2>/dev/null && docker-compose down
 
 echo trying to stop dashboard if installed...
-cd $WOKRING_PATH/dashboard 2>/dev/null && docker-compose down
+cd $WOKRING_PATH/nebula-up/dashboard 2>/dev/null && docker-compose down
 
 echo trying to stop backup_restore if installed...
-cd $WOKRING_PATH/backup_restore 2>/dev/null && docker-compose down
+cd $WOKRING_PATH/nebula-up/backup_restore 2>/dev/null && docker-compose down
 
 EOF
 	sudo chmod +x $WOKRING_PATH/nebula-stop.sh
