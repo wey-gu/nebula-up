@@ -760,14 +760,14 @@ function main {
 		SPARK_C_VERSION="3.0.0"
 		;;
 
-	* | v3.3 | 3.3 | 3.3.0 | v3 )
+	* | v3.4 | 3.4 | 3.4.0 | v3 )
 		logger_info "VERSION not provided"
-		NEBULA_VERSION="v3.3.0"
-		STUDIO_VERSION="3.5.0"
-		CONSOLE_VERSION="v3.3.0"
-		EXCHANGE_VERSION="3.0.0"
+		NEBULA_VERSION="v3.4.0"
+		STUDIO_VERSION="3.6.0"
+		CONSOLE_VERSION="v3.4.0"
+		EXCHANGE_VERSION="3.4.0"
 		ALGO_VERSION="3.0.0"
-		SPARK_C_VERSION="3.0.0"
+		SPARK_C_VERSION="3.4.0"
 		;;
 	esac
 	logger_info "Installing NebulaGraph $NEBULA_VERSION"
