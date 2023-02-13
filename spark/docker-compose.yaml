@@ -1,6 +1,23 @@
 version: '3.7'
 
 services:
+  juptyer:
+    image: 'weygu/pyspark-notebook-nebulagraph:2.4.5-hadoop2.7'
+    container_name: jupyter
+    restart: always
+    ports:
+      - '8888:8888'
+    volumes:
+      - '${PWD}/:/root'
+    networks:
+      - nebula-net
+    healthcheck:
+      test: ["CMD", "netstat", "-plunt", "| grep 8888"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
   master:
     networks:
       - nebula-net
@@ -8,6 +25,12 @@ services:
       - '${PWD}/:/root'
     image: 'bde2020/spark-master:2.4.5-hadoop2.7'
     container_name: sparkmaster
+    healthcheck:
+      test: ["CMD", "netstat", "-plunt", "| grep 8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
