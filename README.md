@@ -35,6 +35,7 @@ Roadmap:
 - [x] NebulaGraph Spark utils
   - [x] NebulaGraph Spark Connector/PySpark REPL
   - [x] NebulaGraph Algorithm
+  - [x] NebulaGraph Algorithm in Jupyter Notebook and PySpark
   - [x] NebulaGraph Exchange
 - [x] NebulaGraph Importer
 - [ ] NebulaGraph Fulltext Search
@@ -159,6 +160,12 @@ Run Nebula Algorithm like:
 ```bash
 ~/.nebula-up/nebula-algo-pagerank-example.sh
 ```
+
+#### Run NebulaGraph Algorithm from Jupyter Notebook with PySpark
+
+Visit Jupyter Notebook with http://127.0.0.1:8888 with token: `nebula`.
+
+Refer to the [example notebook](https://github.com/wey-gu/nebula-up/blob/main/spark/pagerank_example.ipynb) in `~/.nebula-up/nebula-up/spark/notebook/`
 
 #### Try Backup and Restore with MinIO as Storage
 
