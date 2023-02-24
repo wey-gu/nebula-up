@@ -1,0 +1,23 @@
+services:
+  webshell:
+    # profiles: ["webshell"]
+    labels:
+      - "com.vesoft.scope=utils"
+    platform: linux/amd64
+    container_name: nebulagraph_webshell
+    image: weygu/nebula-webconsole:latest
+    ports:
+      - 8376:8376
+    command: --allowed-hostnames localhost,127.0.0.1
+    healthcheck:
+      test: ["CMD", "netstat", "-plunt", "| grep 8376"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - nebula-net
+
+networks:
+  nebula-net:
+    external: true
