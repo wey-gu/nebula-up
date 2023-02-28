@@ -1,5 +1,7 @@
 # Nebula-Up
 
+> News: If you would like to try NebulaGraph(not all toolings) from your desktop env, it's recommended to try with [NebulaGraph Docker Extension on Docker Desktop](https://hub.docker.com/extensions/weygu/nebulagraph-dd-ext) for macOS and Windows, all you need is one-click.
+
 > Update: the All-in-one mode is introduced! Check [here](#all-in-one-mode) and try it!
 
 [![nebula-up demo](./images/nebula-up-demo.svg)](https://asciinema.org/a/407151 "Nebula Up Demo")
