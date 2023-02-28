@@ -745,7 +745,7 @@ function main {
 	case $NEBULA_VERSION in
 	v3.1 | 3.1 | 3.1.0  )
 		NEBULA_VERSION="v3.1.0"
-		STUDIO_VERSION="3.2.4"
+		STUDIO_VERSION="3.2.5"
 		CONSOLE_VERSION="v3.0.0"
 		EXCHANGE_VERSION="3.4.0"
 		ALGO_VERSION="3.1.0"
@@ -755,7 +755,7 @@ function main {
 	* | v3.4 | 3.4 | 3.4.0 | v3 )
 		logger_info "VERSION not provided"
 		NEBULA_VERSION="release-3.4"
-		STUDIO_VERSION="3.6.0"
+		STUDIO_VERSION="3.6.2"
 		CONSOLE_VERSION="v3.4.0"
 		EXCHANGE_VERSION="3.4.0"
 		ALGO_VERSION="3.1.0"
