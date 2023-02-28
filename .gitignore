@@ -11,3 +11,8 @@ nebula_graph_console.sh
 
 */download
 */data
+
+# jupyter
+.ipynb_checkpoints/
+.ipython/
+.local/
