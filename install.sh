@@ -466,7 +466,7 @@ function main {
     * | v3.4 | 3.4 | 3.4.0 | v3 )
         logger_info "VERSION not provided"
         NEBULA_VERSION="release-3.4"
-        STUDIO_VERSION="3.6.0"
+        STUDIO_VERSION="3.6.2"
         CONSOLE_VERSION="v3.4.0"
         ;;
     esac
