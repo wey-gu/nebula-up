@@ -476,12 +476,15 @@ function install_nebula_graph_spark {
 	cd spark
 	docker-compose pull || logger_error "Failed to pull docker images for spark env"
 	docker-compose up -d
-	wget -O download/nebula-spark-connector.jar https://repo1.maven.org/maven2/com/vesoft/nebula-spark-connector/$SPARK_C_VERSION/nebula-spark-connector-$SPARK_C_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Spark Connector Package"
-	wget -O download/nebula-exchange.jar https://github.com/vesoft-inc/nebula-exchange/releases/download/v$EXCHANGE_VERSION/nebula-exchange_spark_2.4-$EXCHANGE_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Exchange Package"
-	wget -O download/nebula-algo.jar https://repo1.maven.org/maven2/com/vesoft/nebula-algorithm/$ALGO_VERSION/nebula-algorithm-$ALGO_VERSION.jar 1>/dev/null 2>/dev/null || logger_error "Failed to download Nebula Algorithm Package"
+	logger_info "downloading nebula-spark-connector: $SPARK_C_VERSION"
+	wget -O download/nebula-spark-connector.jar https://repo1.maven.org/maven2/com/vesoft/nebula-spark-connector/$SPARK_C_VERSION/nebula-spark-connector-$SPARK_C_VERSION.jar || logger_error "Failed to download Nebula Spark Connector Package"
+	logger_info "downloading nebula-exchange: $EXCHANGE_VERSION"
+	wget -O download/nebula-exchange.jar https://github.com/vesoft-inc/nebula-exchange/releases/download/v$EXCHANGE_VERSION/nebula-exchange_spark_2.4-$EXCHANGE_VERSION.jar || logger_error "Failed to download Nebula Exchange Package"
+	logger_info "downloading nebula-algorithm: $ALGO_VERSION"
+	wget -O download/nebula-algo.jar https://repo1.maven.org/maven2/com/vesoft/nebula-algorithm/$ALGO_VERSION/nebula-algorithm-$ALGO_VERSION.jar || logger_error "Failed to download Nebula Algorithm Package"
 	if [ "$ALGO" == "true" ]; then
 		logger_info "Downloading soc-LiveJournal1 dataset..."
-		wget -O download/soc-LiveJournal1.txt.gz https://snap.stanford.edu/data/soc-LiveJournal1.txt.gz
+		wget -O download/soc-LiveJournal1.txt.gz https://snap.stanford.edu/data/soc-LiveJournal1.txt.gz || logger_warn "Failed to download LiveJournal1 dataset"
 		gzip -d download/soc-LiveJournal1.txt.gz
 		sed -i '1,4d' download/soc-LiveJournal1.txt
 	fi
