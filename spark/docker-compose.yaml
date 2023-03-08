@@ -17,6 +17,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 20s
+    environment:
+      - PYSPARK_PYTHON=python3
 
   master:
     networks:
@@ -35,6 +37,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 20s
+    environment:
+      - PYSPARK_PYTHON=python3
 
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
