@@ -39,6 +39,7 @@ services:
       start_period: 20s
     environment:
       - PYSPARK_PYTHON=python3
+      - INIT_DAEMON_STEP=setup_spark
 
   spark-worker-1:
     image: bde2020/spark-worker:2.4.5-hadoop2.7
