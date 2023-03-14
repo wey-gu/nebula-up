@@ -20,6 +20,42 @@ services:
     environment:
       - PYSPARK_PYTHON=python3
 
+  graphd:
+    image: weygu/ngdi-graphd:2023.03.13
+    container_name: ngdi_graphd
+    environment:
+      USER: root
+      TZ:   "${TZ}"
+    command:
+      - --meta_server_addrs=metad0:9559,metad1:9559,metad2:9559
+      - --port=9669
+      - --local_ip=ngdi_graphd
+      - --ws_ip=ngdi_graphd
+      - --ws_http_port=19669
+      - --log_dir=/logs
+      - --v=5
+      - --minloglevel=0
+      - --enable_udf=true
+      - --udf_path=/home/nebula/dev/nebula/udf/
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://ngdi_graphd:19669/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "29669:9669"
+      - 19669
+      - 19670
+    volumes:
+      - ./logs/graph:/logs
+      - ./udf:/home/nebula/dev/nebula/udf
+    networks:
+      - nebula-net
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
   master:
     networks:
       - nebula-net

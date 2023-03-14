@@ -15,5 +15,5 @@ WORKDIR /root
 
 ENTRYPOINT ["/spark/bin/pyspark", "--driver-class-path", "/root/download/nebula-spark-connector.jar", "--jars", "/root/download/nebula-spark-connector.jar", "--jars", "/root/download/nebula-algo.jar"]
 
-# docker build -t weygu/pyspark-notebook-nebulagraph:2.4.5-hadoop2.7 .
+# docker build -t weygu/pyspark-notebook-nebulagraph:2.4.5-hadoop2.7 -f Dockerfile-jupyter .
 # docker run -it --rm -p 8888:8888 weygu/spyspark-notebook-nebulagraph:2.4.5-hadoop2.7
