@@ -50,6 +50,8 @@ services:
       - "8081:8081"
     environment:
       - "SPARK_MASTER=spark://sparkmaster:7077"
+    networks:
+      - nebula-net
 
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
