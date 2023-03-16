@@ -26,6 +26,7 @@ services:
     environment:
       USER: root
       TZ:   "${TZ}"
+      ngdi_gateway_url_prefix: "http://jupyter:9999"
     command:
       - --meta_server_addrs=metad0:9559,metad1:9559,metad2:9559
       - --port=9669
@@ -36,7 +37,7 @@ services:
       - --v=5
       - --minloglevel=0
       - --enable_udf=true
-      - --udf_path=/home/nebula/dev/nebula/udf/
+      - --udf_path=/udf/
     healthcheck:
       test: ["CMD", "curl", "-sf", "http://ngdi_graphd:19669/status"]
       interval: 30s
@@ -49,7 +50,7 @@ services:
       - 19670
     volumes:
       - ./logs/graph:/logs
-      - ./udf:/home/nebula/dev/nebula/udf
+      - ./udf:/udf
     networks:
       - nebula-net
     restart: on-failure
