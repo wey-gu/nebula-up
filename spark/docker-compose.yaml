@@ -38,12 +38,12 @@ services:
       - --minloglevel=0
       - --enable_udf=true
       - --udf_path=/udf/
-    healthcheck:
-      test: ["CMD", "curl", "-sf", "http://ngdi_graphd:19669/status"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 20s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-sf", "http://ngdi_graphd:19669/status"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 20s
     ports:
       - "29669:9669"
       - 19669
