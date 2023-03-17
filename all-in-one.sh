@@ -483,7 +483,7 @@ function install_nebula_graph_spark {
 	logger_info "downloading nebula-algorithm: $ALGO_VERSION"
 	wget -O download/nebula-algo.jar https://repo1.maven.org/maven2/com/vesoft/nebula-algorithm/$ALGO_VERSION/nebula-algorithm-$ALGO_VERSION.jar || logger_error "Failed to download Nebula Algorithm Package"
 	mkdir -p udf
-	wget -O udf/ngdi.so https://github.com/wey-gu/nebulagraph-di/releases/download/0.2.4/ngdi-ubuntu-2004-nebulagraph-nightly-2023.03.13.so || logger_error "Failed to download ngdi UDF"
+	sudo wget -O udf/ngdi.so https://github.com/wey-gu/nebulagraph-di/releases/download/0.2.4/ngdi-ubuntu-2004-nebulagraph-nightly-2023.03.13.so || logger_error "Failed to download ngdi UDF"
 	sudo chmod +x udf/ngdi.so
 	if [ "$ALGO" == "true" ]; then
 		logger_info "Downloading soc-LiveJournal1 dataset..."

@@ -6,7 +6,7 @@ services:
     container_name: jupyter
     restart: always
     ports:
-      - '8888:8888'
+      - '18888:8888'
     volumes:
       - '${PWD}/:/root'
     networks:
