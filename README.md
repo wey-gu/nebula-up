@@ -48,9 +48,9 @@ Roadmap:
 - [ ] Nebula Build, Debug and Dev Env
 - [ ] Nebula Flink Connector Playground
 - [x] NebulaGraph + DGL(Deep Graph Library)
-- [x] NebulaGraph Data Intelligence Suite(ngdi) Playground
+- [x] NebulaGraph AI Suite(ngai) Playground
   - [x] Read, WRite, Algo on Spark engine
-  - [x] Call ngdi algo from ngdi_graphd with UDF
+  - [x] Call ngai algo from ngai_graphd with UDF
 
 ### Install all in one
 ```bash

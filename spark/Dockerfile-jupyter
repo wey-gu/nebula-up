@@ -2,7 +2,7 @@ FROM bde2020/spark-master:2.4.5-hadoop2.7
 
 RUN apk add --no-cache build-base linux-headers python3-dev libffi-dev py3-pip && \
     pip3 install --upgrade pip && \
-    pip3 install psutil notebook ngdi && \
+    pip3 install psutil notebook ng_ai && \
     apk del build-base linux-headers python3-dev libffi-dev && \
     rm -rf /var/cache/apk/*
 
