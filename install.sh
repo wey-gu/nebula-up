@@ -307,7 +307,7 @@ function waiting_for_nebula_graph_up {
 
 function remove_port_mappings {
     # replace "9669:9669" with 9669 from docker-compose.yaml
-    sed -i '' 's/9669:9669/9669/g' docker-compose.yaml
+    # sed -i '' 's/9669:9669/9669/g' docker-compose.yaml
     # replace "sleep 3 " with "sleep 120 " from docker-compose.yaml
     sed -i '' 's/sleep 3 /sleep 120 /g' docker-compose.yaml
 }
