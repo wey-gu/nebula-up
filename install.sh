@@ -463,11 +463,11 @@ function main {
         STUDIO_VERSION="3.1.0"
         CONSOLE_VERSION="v2.6.0"
         ;;
-    * | v3.4 | 3.4 | 3.4.0 | v3 )
+    * | v3.5 | 3.5 | 3.5.0 | v3 )
         logger_info "VERSION not provided"
-        NEBULA_VERSION="release-3.4"
-        STUDIO_VERSION="3.6.2"
-        CONSOLE_VERSION="v3.4.0"
+        NEBULA_VERSION="release-3.5"
+        STUDIO_VERSION="3.7.0"
+        CONSOLE_VERSION="v3.5.0"
         ;;
     esac
     logger_info "Installing NebulaGraph $NEBULA_VERSION"
