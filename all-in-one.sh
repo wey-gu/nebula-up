@@ -765,7 +765,7 @@ function main {
 		CONSOLE_VERSION="v3.5.0"
 		EXCHANGE_VERSION="3.6.0"
 		ALGO_VERSION="3.1.0"
-		SPARK_C_VERSION="3.4.0"
+		SPARK_C_VERSION="3.6.0"
 		;;
 	esac
 	logger_info "Installing NebulaGraph $NEBULA_VERSION"
