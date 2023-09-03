@@ -3,7 +3,6 @@ services:
     # profiles: ["webshell"]
     labels:
       - "com.vesoft.scope=utils"
-    platform: linux/amd64
     container_name: nebulagraph_webshell
     image: weygu/nebula-webconsole:latest
     ports:
